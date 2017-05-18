@@ -1,0 +1,762 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{74AF5DB3-4CC0-42D6-9041-0EF606C4CC31}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SJLInvEntity</RootNamespace>
+    <AssemblyName>SJLInvEntity</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BankBranch.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ChildProductRegistration.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DeletedBillDetail.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DeletedBillMain.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DeletedChallanDetail.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DeletedChallanMain.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DeletedCurrentStock.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DeletedCustomerMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DeletedInwardDetail.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DeletedInwardMain.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DeletedMaxDiscount.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DeletedPartyOrderDetail.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DeletedPartyOrderMain.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DeletedProductDispatchDetail.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DeletedPurchaseOrderDetail.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DeletedPurchaseOrderMain.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DeletedReceipt.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DeletedSalesReturnDetail.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DeletedSalesReturnMain.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DeletedStockJv.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DeletedVoucher.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="D_sessnmaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Franchise.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetLogin_Result.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Im_CurrentStock.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Im_CurrentStock13Apr17.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Im_CurrentStock22Apr17.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IM_CurrentStockwithPinData.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Inv_M_ConfigMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Inv_M_MenuMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Inv_M_SearchTypeMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Inv_M_ThemeMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Inv_M_UserMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Inv_M_UserPermissionMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Inv_TempUserMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Inv_TempUserPermissionMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MakeKit.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_BankMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_BarCodeMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_BatchMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_BillCondition.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_BillTypeMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_BlockProductMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_BloodGroupMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_BrandMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_CardIssue.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_CatMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_ChargesMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_CityStateMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_CompanyMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_CompBankersMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_ConfigMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_CountryMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_CouponSalesDetail.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_CourierMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_CustomerMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_DeleteTransaction.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_DispatchMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_DispatchTypeMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_DistrictMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_DivisionMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_ExtraDiscount.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_FiscalMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_FlashMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_FormGeneration.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_GroupMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_Initials.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_InsuranceCompMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_InvoiceTypeMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_InwardData.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_InwardDetail.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_InwardMain.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_IsCardIssue.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_JType.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_KitProductMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_KitUnitMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_LeaderWiseOffer.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_LedgerMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_LedgerMAsterPartyCode.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_LedgerMaster_Old.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_MaxDiscount.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_MemberMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_MenuMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_MonthSessnMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_NewCustomer.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_NewHOVersionInfo.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_NewOfferMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_NewsSeminarMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_OccupationMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_OfferProductType.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_OfferType.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_PackageProductMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_PartyDiscount.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_PartyWiseBillCondition.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_PayModeMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_PKGForCustBilling.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_PlanMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_ProductKitUnitMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_ProductMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_ProfessionMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_QualifyTypeMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_ReportType.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_Reward.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_RewardMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_SearchMethodMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_SearchTypeMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_SessnMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_SpecialOfferMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_SpecialProductMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_StateDivMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_StockReportType.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_SubCategory.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_SubCatMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_TaxBaseMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_TaxCatMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_TaxMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_TaxTypeMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_ThemeMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_UserDataHistory.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_UserGroupMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_UserMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="M_UserPermissionMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ProdVoucher.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RepurchIncome.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ReqType.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Sample_Result.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SJLInv.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SJLInv.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SJLInv.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SJLInv.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SJLInv.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="TempBankMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TempBarCodeMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TempBatchMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TempBillMain.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TempCatMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TempChildProductRegistration.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TempCityStateMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TempCompBankersMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TempCourierMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TempDispatchMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TempDistrictMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TempLeaderWiseOffer.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TempLedger.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TempLedgerMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TempNewHOVersionInfo.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TempNewOfferMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TempPartyWiseBillCondition.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TempProductBookingMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TempProductMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TempSalesReturnDetail.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TempSalesReturnMain.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TempStateDivMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TempSubCatMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TempTaxCatMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TempTaxMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TempVoucher.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TransMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TrnBillData.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TrnBillData22Apr17.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TrnBillDetail.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TrnBillDetails22Apr17.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TrnBillMain.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TrnBillMain22Apr17.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TrnCancelOrder.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TrnCancelOrderDetail.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TrnChallanDetail.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TrnChallanMain.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TrnFormGeneration.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TrnLedger.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TrnOrderDeliveryDetail.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TrnPartyOrderDetail.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TrnPartyOrderMain.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TrnPaymentConfirmation.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TrnPaymentHoldDetail.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TrnPayModeDetail.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TrnPayModeMaster.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TrnPickListDetail.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TrnProduct.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TrnProductDispatchDetail.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TrnProductDispatchDetail22Apr17.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TrnProductMain.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TrnPurchaseOrderDetail.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TrnPurchaseOrderMain.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TrnPurchaseReqDetail.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TrnPurchaseReqMain.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TrnReceipt.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TrnReceiptDetail.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TrnSalesReturnDetail.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TrnSalesReturnMain.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TrnStockAdjustment.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TrnStockJv.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TrnUpdateBillDetail.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TrnVoucher.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TrnVoucher22Apr17.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="V_AccountStatement.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="V_AvailProdStockBarcodes.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="V_BillWiseSaleSummary.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="V_City.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="V_CurrentStockDetail.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="V_CurrentStockDetailNotForStockist.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="V_CurrentStockDetail_STK.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="V_District.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="V_GroupWiseSaleSummary.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="V_IDWiseBillSummary.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="V_LedgerBalance.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="V_MonthWisePartyPurchaseSummary.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="V_MonthWiseSaleSummary.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="V_MonthWiseSupplierPurchaseSummary.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="V_OfferProductDetail.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="V_PartyDetail.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="V_PartyWiseBalance.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="V_PaymentModeWiseDetail.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="V_ProductStockPosition.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="V_ProductStockPosition_STK.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="V_ProductWiseSale.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="V_SaleReturnDetail.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="V_StockPlanning.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="V_StockPlanningForSTKST.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="V_StockRecvSummary.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="V_TopSellingProducts.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="V_TransportDetail.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="V_User.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+    <Compile Include="V_WebBillDetail.cs">
+      <DependentUpon>SJLInv.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.Config" />
+    <None Include="packages.config" />
+    <EntityDeploy Include="SJLInv.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>SJLInv.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="SJLInv.edmx.diagram">
+      <DependentUpon>SJLInv.edmx</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="SJLInv.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>SJLInv.edmx</DependentUpon>
+      <LastGenOutput>SJLInv.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="SJLInv.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>SJLInv.edmx</DependentUpon>
+      <LastGenOutput>SJLInv.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

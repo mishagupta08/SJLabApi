@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SJLABSAPI", "SJLABSAPI\SJLABSAPI.csproj", "{3595585E-6EED-4A9A-89FA-FA9847769CC9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SJLabEntity", "SJLabEntity\SJLabEntity.csproj", "{1B19843A-737F-4033-B5EF-893F56256002}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SJLInvEntity", "SJLInvEntity\SJLInvEntity.csproj", "{74AF5DB3-4CC0-42D6-9041-0EF606C4CC31}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3595585E-6EED-4A9A-89FA-FA9847769CC9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3595585E-6EED-4A9A-89FA-FA9847769CC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3595585E-6EED-4A9A-89FA-FA9847769CC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3595585E-6EED-4A9A-89FA-FA9847769CC9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B19843A-737F-4033-B5EF-893F56256002}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B19843A-737F-4033-B5EF-893F56256002}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B19843A-737F-4033-B5EF-893F56256002}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B19843A-737F-4033-B5EF-893F56256002}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74AF5DB3-4CC0-42D6-9041-0EF606C4CC31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74AF5DB3-4CC0-42D6-9041-0EF606C4CC31}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74AF5DB3-4CC0-42D6-9041-0EF606C4CC31}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74AF5DB3-4CC0-42D6-9041-0EF606C4CC31}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
