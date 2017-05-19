@@ -13,8 +13,9 @@ namespace SJLABSAPI.Service
 {
     public class LedgerService
     {
-        public List<DeliveryAddressList> GetDeliveryAddressList()
+        public string GetDeliveryAddressList()
         {
+            string response = string.Empty;
             List<DeliveryAddressList> AddressList = new List<DeliveryAddressList>();
             try { 
                 using(var db = new SJLInvEntities())
@@ -26,12 +27,14 @@ namespace SJLABSAPI.Service
                                      id = r.PartyCode,
                                      name = r.PartyName,                                     
                                    }).ToList();
+                    response = "{\"Addresss\":" + JsonConvert.SerializeObject(AddressList) + ",\"response\":\"OK\"}";
                 }
             }
             catch (Exception ex){
                 Console.WriteLine(ex.InnerException);
+                response = "{\"response\":\"FAILED\"}";
             }
-            return AddressList;
+            return response;
         }
 
         public string getOTP(string userMobile)
@@ -311,6 +314,50 @@ namespace SJLABSAPI.Service
                 response = "{\"response\":\"FAILED\"}";
             }
             return response;
-        }                  
+        }
+
+        public string TeamDetail(string userid, string passwd) {
+            string response = string.Empty;
+            UserService uservice = new UserService();
+            try
+            {
+                if (uservice.UserExists(userid, passwd))
+                {
+                    using (var db = new SjLabsEntities())
+                    {
+                        response = "{\"response\":\"FAILED\"}";
+                        decimal FormNo = GetFormNo(userid);
+                    }
+                }
+                else
+                {
+                    response = "{\"response\":\"FAILED\",\"msg\":\"Invalid login details\"}";
+                }
+            }
+            catch (Exception ex)
+            {
+                response = "{\"response\":\"FAILED\"}";
+            }
+            return response;
+        }
+
+
+        public decimal GetFormNo(string IDNO) {
+            decimal FrmNo = 0;
+            try {
+                using (var db = new SjLabsEntities())
+                {
+                    FrmNo = (from r in db.M_MemberMaster where r.IdNo == IDNO select r.FormNo).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.InnerException);
+            }
+            return FrmNo;
+        }        
+
+
+
     }   
 }

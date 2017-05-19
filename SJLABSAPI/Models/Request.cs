@@ -13,6 +13,8 @@ namespace SJLABSAPI.Models
         public string passwd { get; set; }
         public string mobile { get; set; }
         public string memberid { get; set; }
+        public string npasswd { get; set; }
+        public string formno { get; set; }
 
     }
 }
