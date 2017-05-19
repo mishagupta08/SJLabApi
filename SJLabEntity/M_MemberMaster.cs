@@ -119,5 +119,11 @@ namespace SJLabEntity
         public Nullable<System.DateTime> BlockDate { get; set; }
         public string DeliveryAddress { get; set; }
         public string DeliveryCenter { get; set; }
+        public string FormFrontSide { get; set; }
+        public string FormBackSide { get; set; }
+        public System.DateTime FormFrontDate { get; set; }
+        public System.DateTime FormBackDate { get; set; }
+        public string FormBackVerify { get; set; }
+        public string FormFrontVerify { get; set; }
     }
 }

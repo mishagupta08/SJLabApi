@@ -123,5 +123,11 @@ namespace SJLabEntity
         public string ChangeType { get; set; }
         public System.DateTime TRecTimeStamp { get; set; }
         public string CType { get; set; }
+        public string FormFrontSide { get; set; }
+        public string FormBackSide { get; set; }
+        public System.DateTime FormFrontDate { get; set; }
+        public System.DateTime FormBackDate { get; set; }
+        public string FormBackVerify { get; set; }
+        public string FormFrontVerify { get; set; }
     }
 }

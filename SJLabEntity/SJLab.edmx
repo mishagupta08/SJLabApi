@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="SjLabsModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="SjLabsModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Ac_GroupMaster">
           <Key>
             <PropertyRef Name="GroupID" />
@@ -473,16 +473,9 @@ warning 6002: The table/view 'SjLabs.dbo.M_ActiveDeActiveReason' does not have a
           <Property Name="KitId" Type="numeric" Precision="18" Scale="0" Nullable="false" />
           <Property Name="EntryDate" Type="datetime" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'SjLabs.dbo.M_AppUser' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="M_AppUser">
           <Key>
             <PropertyRef Name="ID" />
-            <PropertyRef Name="UserID" />
-            <PropertyRef Name="OTP" />
-            <PropertyRef Name="RecTimeStamp" />
-            <PropertyRef Name="ActiveStatus" />
-            <PropertyRef Name="Retry" />
           </Key>
           <Property Name="ID" Type="numeric" Precision="18" Scale="0" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="UserID" Type="varchar" MaxLength="20" Nullable="false" />
@@ -1315,6 +1308,12 @@ warning 6002: The table/view 'SjLabs.dbo.M_MaxDiscount' does not have a primary 
           <Property Name="BlockDate" Type="datetime" />
           <Property Name="DeliveryAddress" Type="varchar" MaxLength="250" Nullable="false" />
           <Property Name="DeliveryCenter" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="FormFrontSide" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="FormBackSide" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="FormFrontDate" Type="datetime" Nullable="false" />
+          <Property Name="FormBackDate" Type="datetime" Nullable="false" />
+          <Property Name="FormBackVerify" Type="char" MaxLength="1" Nullable="false" />
+          <Property Name="FormFrontVerify" Type="char" MaxLength="1" Nullable="false" />
         </EntityType>
         <EntityType Name="M_MemFormDetail">
           <Key>
@@ -2176,14 +2175,6 @@ warning 6002: The table/view 'SjLabs.dbo.MstBatchRegister' does not have a prima
           <Property Name="Result" Type="varchar" MaxLength="200" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6013: The table/view 'SjLabs.dbo.MstGrowthSlab' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="MstGrowthSlab">
-          <Property Name="MLevel" Type="numeric" Precision="18" Scale="0" />
-          <Property Name="Cnt" Type="numeric" Precision="18" Scale="0" />
-          <Property Name="Gift" Type="varchar" MaxLength="50" />
-          <Property Name="Amount" Type="numeric" Precision="18" Scale="2" />
-        </EntityType>-->
-        <!--Errors Found During Generation:
 warning 6002: The table/view 'SjLabs.dbo.MstLevelSlab' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="MstLevelSlab">
           <Key>
@@ -2820,6 +2811,12 @@ warning 6002: The table/view 'SjLabs.dbo.TempMemberMaster' does not have a prima
             <PropertyRef Name="IsBlock" />
             <PropertyRef Name="DeliveryAddress" />
             <PropertyRef Name="DeliveryCenter" />
+            <PropertyRef Name="FormFrontSide" />
+            <PropertyRef Name="FormBackSide" />
+            <PropertyRef Name="FormFrontDate" />
+            <PropertyRef Name="FormBackDate" />
+            <PropertyRef Name="FormBackVerify" />
+            <PropertyRef Name="FormFrontVerify" />
             <PropertyRef Name="ChangeType" />
             <PropertyRef Name="TRecTimeStamp" />
             <PropertyRef Name="CType" />
@@ -2930,6 +2927,12 @@ warning 6002: The table/view 'SjLabs.dbo.TempMemberMaster' does not have a prima
           <Property Name="BlockDate" Type="datetime" />
           <Property Name="DeliveryAddress" Type="varchar" MaxLength="250" Nullable="false" />
           <Property Name="DeliveryCenter" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="FormFrontSide" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="FormBackSide" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="FormFrontDate" Type="datetime" Nullable="false" />
+          <Property Name="FormBackDate" Type="datetime" Nullable="false" />
+          <Property Name="FormBackVerify" Type="char" MaxLength="1" Nullable="false" />
+          <Property Name="FormFrontVerify" Type="char" MaxLength="1" Nullable="false" />
           <Property Name="ChangeType" Type="varchar" MaxLength="250" Nullable="false" />
           <Property Name="TRecTimeStamp" Type="datetime" Nullable="false" />
           <Property Name="CType" Type="char" MaxLength="1" Nullable="false" />
@@ -4672,16 +4675,6 @@ warning 6002: The table/view 'SjLabs.dbo.V#EpinStatus' does not have a primary k
           <Property Name="IssuedDate" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6013: The table/view 'SjLabs.dbo.V#FundMIS' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="V#FundMIS">
-          <Property Name="TotalIncoming" Type="numeric" Precision="38" Scale="2" />
-          <Property Name="OutGoingTotal" Type="numeric" Precision="38" Scale="2" />
-          <Property Name="TotalDeduction" Type="numeric" Precision="38" Scale="2" />
-          <Property Name="TotalOutGoingFund" Type="numeric" Precision="38" Scale="2" />
-          <Property Name="ClosingFund" Type="numeric" Precision="38" Scale="0" />
-          <Property Name="BalanceFund" Type="numeric" Precision="38" Scale="2" />
-        </EntityType>-->
-        <!--Errors Found During Generation:
 warning 6002: The table/view 'SjLabs.dbo.V#IDSummary' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="V#IDSummary">
           <Key>
@@ -4750,24 +4743,6 @@ warning 6002: The table/view 'SjLabs.dbo.V#JoinColor' does not have a primary ke
           <Property Name="FormNo" Type="numeric" Precision="18" Scale="0" Nullable="false" />
           <Property Name="JoinColor" Type="varchar" MaxLength="50" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'SjLabs.dbo.V#JoiningMIS' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="V#JoiningMIS">
-          <Property Name="TotalJoining" Type="int" />
-          <Property Name="ActivateJoining" Type="int" />
-          <Property Name="DeActivateJoining" Type="int" />
-          <Property Name="CurrentTotalJoining" Type="int" />
-          <Property Name="CurrentActiveJoining" Type="int" />
-          <Property Name="CurrentDeActiveJoining" Type="int" />
-        </EntityType>-->
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'SjLabs.dbo.V#JoiningStatus' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="V#JoiningStatus">
-          <Property Name="CurrentJoining" Type="int" />
-          <Property Name="UpToDateJoining" Type="int" />
-          <Property Name="TotalActivateJoin" Type="int" />
-          <Property Name="TotalDeActivateJoin" Type="int" />
-        </EntityType>-->
         <!--Errors Found During Generation:
 warning 6002: The table/view 'SjLabs.dbo.V#LedgerBalance' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="V#LedgerBalance">
@@ -5415,18 +5390,6 @@ warning 6002: The table/view 'SjLabs.dbo.V#MonthPayoutDetail' does not have a pr
           <Property Name="ClsBal" Type="numeric" Precision="18" Scale="2" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6013: The table/view 'SjLabs.dbo.V#MultiTopupDetail' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="V#MultiTopupDetail">
-          <Property Name="FormNo" Type="numeric" Precision="18" Scale="0" />
-          <Property Name="KitID" Type="numeric" Precision="18" Scale="0" />
-          <Property Name="IdNo" Type="varchar" MaxLength="50" />
-          <Property Name="MemFirstName" Type="varchar" MaxLength="250" />
-          <Property Name="KitName" Type="varchar" MaxLength="500" />
-          <Property Name="KitAmount" Type="numeric" Precision="18" Scale="2" />
-          <Property Name="BV" Type="numeric" Precision="18" Scale="2" />
-          <Property Name="UpgradeDate" Type="datetime" />
-        </EntityType>-->
-        <!--Errors Found During Generation:
 warning 6002: The table/view 'SjLabs.dbo.V#News' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="V#News">
           <Key>
@@ -5442,14 +5405,6 @@ warning 6002: The table/view 'SjLabs.dbo.V#News' does not have a primary key def
           <Property Name="NewsDtl" Type="varchar" MaxLength="5000" Nullable="false" />
           <Property Name="NType" Type="varchar" MaxLength="8" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'SjLabs.dbo.V#OutGoingFund' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="V#OutGoingFund">
-          <Property Name="TotalOutGoingFund" Type="numeric" Precision="38" Scale="2" />
-          <Property Name="TotalDeduction" Type="numeric" Precision="38" Scale="2" />
-          <Property Name="ChqueFund" Type="numeric" Precision="38" Scale="2" />
-          <Property Name="ClosingFund" Type="numeric" Precision="38" Scale="0" />
-        </EntityType>-->
         <!--Errors Found During Generation:
 warning 6002: The table/view 'SjLabs.dbo.V#Payout' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="V#Payout">
@@ -5784,11 +5739,6 @@ warning 6002: The table/view 'SjLabs.dbo.V#Qualifier' does not have a primary ke
           <Property Name="WkrLegBv" Type="numeric" Precision="38" Scale="2" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6013: The table/view 'SjLabs.dbo.v#Random' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="v#Random">
-          <Property Name="RandomNumber" Type="varchar" MaxLength="8000" />
-        </EntityType>-->
-        <!--Errors Found During Generation:
 warning 6002: The table/view 'SjLabs.dbo.v#refdownline' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="v#refdownline">
           <Key>
@@ -5932,11 +5882,6 @@ warning 6002: The table/view 'SjLabs.dbo.V#RptServiceFund' does not have a prima
           <Property Name="Used" Type="numeric" Precision="18" Scale="2" Nullable="false" />
           <Property Name="Narration" Type="varchar" MaxLength="2500" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'SjLabs.dbo.V#ScratchNo' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="V#ScratchNo">
-          <Property Name="ScNo" Type="varchar" MaxLength="5" />
-        </EntityType>-->
         <!--Errors Found During Generation:
 warning 6002: The table/view 'SjLabs.dbo.V#SessionWiseFundMIS' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="V#SessionWiseFundMIS">
@@ -6691,6 +6636,7 @@ warning 6002: The table/view 'SjLabs.dbo.V#User' does not have a primary key def
           <EntitySet Name="Ac_LedgerMaster" EntityType="Self.Ac_LedgerMaster" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Ac_TrnVoucher" EntityType="Self.Ac_TrnVoucher" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Ac_VoucherType" EntityType="Self.Ac_VoucherType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="M_AppUser" EntityType="Self.M_AppUser" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="M_BankMaster" EntityType="Self.M_BankMaster" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="M_BillTypeMaster" EntityType="Self.M_BillTypeMaster" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="M_BloodGroupMaster" EntityType="Self.M_BloodGroupMaster" Schema="dbo" store:Type="Tables" />
@@ -6964,16 +6910,6 @@ warning 6002: The table/view 'SjLabs.dbo.V#User' does not have a primary key def
     [M_ActiveDeActiveReason].[KitId] AS [KitId], 
     [M_ActiveDeActiveReason].[EntryDate] AS [EntryDate]
     FROM [dbo].[M_ActiveDeActiveReason] AS [M_ActiveDeActiveReason]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="M_AppUser" EntityType="Self.M_AppUser" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [M_AppUser].[ID] AS [ID], 
-    [M_AppUser].[UserID] AS [UserID], 
-    [M_AppUser].[OTP] AS [OTP], 
-    [M_AppUser].[RecTimeStamp] AS [RecTimeStamp], 
-    [M_AppUser].[ActiveStatus] AS [ActiveStatus], 
-    [M_AppUser].[Retry] AS [Retry]
-    FROM [dbo].[M_AppUser] AS [M_AppUser]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="M_Award" EntityType="Self.M_Award" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -7960,6 +7896,12 @@ warning 6002: The table/view 'SjLabs.dbo.V#User' does not have a primary key def
     [TempMemberMaster].[BlockDate] AS [BlockDate], 
     [TempMemberMaster].[DeliveryAddress] AS [DeliveryAddress], 
     [TempMemberMaster].[DeliveryCenter] AS [DeliveryCenter], 
+    [TempMemberMaster].[FormFrontSide] AS [FormFrontSide], 
+    [TempMemberMaster].[FormBackSide] AS [FormBackSide], 
+    [TempMemberMaster].[FormFrontDate] AS [FormFrontDate], 
+    [TempMemberMaster].[FormBackDate] AS [FormBackDate], 
+    [TempMemberMaster].[FormBackVerify] AS [FormBackVerify], 
+    [TempMemberMaster].[FormFrontVerify] AS [FormFrontVerify], 
     [TempMemberMaster].[ChangeType] AS [ChangeType], 
     [TempMemberMaster].[TRecTimeStamp] AS [TRecTimeStamp], 
     [TempMemberMaster].[CType] AS [CType]
@@ -9735,8 +9677,7 @@ warning 6002: The table/view 'SjLabs.dbo.V#User' does not have a primary key def
     FROM [dbo].[V#User] AS [V#User]</DefiningQuery>
           </EntitySet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="SjLabsModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -10307,6 +10248,12 @@ warning 6002: The table/view 'SjLabs.dbo.V#User' does not have a primary key def
           <Property Name="BlockDate" Type="DateTime" Precision="3" />
           <Property Name="DeliveryAddress" Type="String" MaxLength="250" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="DeliveryCenter" Type="String" MaxLength="250" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="FormFrontSide" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="FormBackSide" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="FormFrontDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="FormBackDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="FormBackVerify" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="FormFrontVerify" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
         </EntityType>
         <EntityType Name="M_MemFormDetail">
           <Key>
@@ -11129,22 +11076,6 @@ warning 6002: The table/view 'SjLabs.dbo.V#User' does not have a primary key def
           <Property Name="UserId" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
           <Property Name="KitId" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
           <Property Name="EntryDate" Type="DateTime" Nullable="false" Precision="3" />
-        </EntityType>
-        <EntityType Name="M_AppUser">
-          <Key>
-            <PropertyRef Name="ID" />
-            <PropertyRef Name="UserID" />
-            <PropertyRef Name="OTP" />
-            <PropertyRef Name="RecTimeStamp" />
-            <PropertyRef Name="ActiveStatus" />
-            <PropertyRef Name="Retry" />
-          </Key>
-          <Property Name="ID" Type="Decimal" Precision="18" Scale="0" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UserID" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="OTP" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="RecTimeStamp" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="ActiveStatus" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
-          <Property Name="Retry" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
         </EntityType>
         <EntityType Name="M_Award">
           <Key>
@@ -12684,6 +12615,12 @@ warning 6002: The table/view 'SjLabs.dbo.V#User' does not have a primary key def
             <PropertyRef Name="ChangeType" />
             <PropertyRef Name="TRecTimeStamp" />
             <PropertyRef Name="CType" />
+            <PropertyRef Name="FormFrontSide" />
+            <PropertyRef Name="FormBackSide" />
+            <PropertyRef Name="FormFrontDate" />
+            <PropertyRef Name="FormBackDate" />
+            <PropertyRef Name="FormBackVerify" />
+            <PropertyRef Name="FormFrontVerify" />
           </Key>
           <Property Name="AID" Type="Decimal" Precision="18" Scale="0" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="MId" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
@@ -12794,6 +12731,12 @@ warning 6002: The table/view 'SjLabs.dbo.V#User' does not have a primary key def
           <Property Name="ChangeType" Type="String" MaxLength="250" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="TRecTimeStamp" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="CType" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="FormFrontSide" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="FormBackSide" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="FormFrontDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="FormBackDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="FormBackVerify" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="FormFrontVerify" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
         </EntityType>
         <EntityType Name="TempOrder">
           <Key>
@@ -15742,7 +15685,6 @@ warning 6002: The table/view 'SjLabs.dbo.V#User' does not have a primary key def
           <EntitySet Name="M_AcitiveDeActive" EntityType="Self.M_AcitiveDeActive" />
           <EntitySet Name="M_ActiveDeActivePinStatus" EntityType="Self.M_ActiveDeActivePinStatus" />
           <EntitySet Name="M_ActiveDeActiveReason" EntityType="Self.M_ActiveDeActiveReason" />
-          <EntitySet Name="M_AppUser" EntityType="Self.M_AppUser" />
           <EntitySet Name="M_Award" EntityType="Self.M_Award" />
           <EntitySet Name="M_AwardFinal" EntityType="Self.M_AwardFinal" />
           <EntitySet Name="M_AwardMaster" EntityType="Self.M_AwardMaster" />
@@ -15891,10 +15833,10 @@ warning 6002: The table/view 'SjLabs.dbo.V#User' does not have a primary key def
           <EntitySet Name="V_TriangularIDs" EntityType="Self.V_TriangularIDs" />
           <EntitySet Name="V_User" EntityType="Self.V_User" />
           <FunctionImport Name="MyTeamData" IsComposable="true" ReturnType="Collection(SjLabsModel.MyTeamData_Result)">
-            <Parameter Name="FormNo" Mode="In" Type="Int32" />
+          <Parameter Name="FormNo" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="Sample" IsComposable="true" ReturnType="Collection(SjLabsModel.Sample_Result)">
-            <Parameter Name="SampleValue" Mode="In" Type="Int32" />
+          <Parameter Name="SampleValue" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SplitString" IsComposable="true" ReturnType="Collection(SjLabsModel.SplitString_Result)">
             <Parameter Name="Input" Mode="In" Type="String" />
@@ -15906,10 +15848,10 @@ warning 6002: The table/view 'SjLabs.dbo.V#User' does not have a primary key def
           </FunctionImport>
           <FunctionImport Name="AutoRewardEntry" />
           <FunctionImport Name="AutoWithDrawal">
-            <Parameter Name="SessID" Mode="In" Type="Decimal" />
+          <Parameter Name="SessID" Mode="In" Type="Decimal" />
           </FunctionImport>
           <FunctionImport Name="AwardInc">
-            <Parameter Name="SessID" Mode="In" Type="Decimal" />
+          <Parameter Name="SessID" Mode="In" Type="Decimal" />
           </FunctionImport>
           <FunctionImport Name="BillDetails">
             <Parameter Name="BillNo" Mode="In" Type="String" />
@@ -15994,26 +15936,26 @@ warning 6002: The table/view 'SjLabs.dbo.V#User' does not have a primary key def
             <Parameter Name="DiscountAmt" Mode="In" Type="Decimal" />
           </FunctionImport>
           <FunctionImport Name="BinaryPayout">
-            <Parameter Name="SessID" Mode="In" Type="Decimal" />
+          <Parameter Name="SessID" Mode="In" Type="Decimal" />
           </FunctionImport>
           <FunctionImport Name="ChangeCombo">
             <Parameter Name="OrderNo" Mode="In" Type="Decimal" />
             <Parameter Name="NewKitID" Mode="In" Type="Decimal" />
           </FunctionImport>
           <FunctionImport Name="DailyPayout">
-            <Parameter Name="SessID" Mode="In" Type="Decimal" />
+          <Parameter Name="SessID" Mode="In" Type="Decimal" />
           </FunctionImport>
           <FunctionImport Name="DailyPayoutCFPoint">
-            <Parameter Name="sessid" Mode="In" Type="Decimal" />
+          <Parameter Name="sessid" Mode="In" Type="Decimal" />
           </FunctionImport>
           <FunctionImport Name="DelID">
-            <Parameter Name="FormNo" Mode="In" Type="Decimal" />
+          <Parameter Name="FormNo" Mode="In" Type="Decimal" />
           </FunctionImport>
           <FunctionImport Name="DelIDByRk">
-            <Parameter Name="FormNo" Mode="In" Type="Decimal" />
+          <Parameter Name="FormNo" Mode="In" Type="Decimal" />
           </FunctionImport>
           <FunctionImport Name="FareInc">
-            <Parameter Name="SessID" Mode="In" Type="Decimal" />
+          <Parameter Name="SessID" Mode="In" Type="Decimal" />
           </FunctionImport>
           <FunctionImport Name="Frnchise">
             <Parameter Name="GrpID" Mode="In" Type="Int32" />
@@ -16021,7 +15963,7 @@ warning 6002: The table/view 'SjLabs.dbo.V#User' does not have a primary key def
             <Parameter Name="ID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="FTR">
-            <Parameter Name="SessID" Mode="In" Type="Decimal" />
+          <Parameter Name="SessID" Mode="In" Type="Decimal" />
           </FunctionImport>
           <FunctionImport Name="Generate_EPins">
             <Parameter Name="KitId" Mode="In" Type="Decimal" />
@@ -16038,7 +15980,7 @@ warning 6002: The table/view 'SjLabs.dbo.V#User' does not have a primary key def
             <Parameter Name="AcType" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="Gettime" ReturnType="Collection(String)">
-            <Parameter Name="FormNo" Mode="In" Type="Decimal" />
+          <Parameter Name="FormNo" Mode="In" Type="Decimal" />
           </FunctionImport>
           <FunctionImport Name="Insert_NewMenu">
             <Parameter Name="Hierar" Mode="In" Type="String" />
@@ -16047,7 +15989,7 @@ warning 6002: The table/view 'SjLabs.dbo.V#User' does not have a primary key def
             <Parameter Name="FormName" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="InsertBFundSumm">
-            <Parameter Name="SessID" Mode="In" Type="Int32" />
+          <Parameter Name="SessID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="LegShift">
             <Parameter Name="FormNo" Mode="In" Type="Decimal" />
@@ -16055,16 +15997,16 @@ warning 6002: The table/view 'SjLabs.dbo.V#User' does not have a primary key def
             <Parameter Name="LegNo" Mode="In" Type="Decimal" />
           </FunctionImport>
           <FunctionImport Name="LifeTimeReward">
-            <Parameter Name="SessID" Mode="In" Type="Decimal" />
+          <Parameter Name="SessID" Mode="In" Type="Decimal" />
           </FunctionImport>
           <FunctionImport Name="LifeTimeRewardNew">
-            <Parameter Name="SessID" Mode="In" Type="Decimal" />
+          <Parameter Name="SessID" Mode="In" Type="Decimal" />
           </FunctionImport>
           <FunctionImport Name="LifeTimeRewardTemp">
-            <Parameter Name="SessID" Mode="In" Type="Decimal" />
+          <Parameter Name="SessID" Mode="In" Type="Decimal" />
           </FunctionImport>
           <FunctionImport Name="LTR">
-            <Parameter Name="SessId" Mode="In" Type="Decimal" />
+          <Parameter Name="SessId" Mode="In" Type="Decimal" />
           </FunctionImport>
           <FunctionImport Name="PinTransfer">
             <Parameter Name="FromIdNo" Mode="In" Type="String" />
@@ -16073,19 +16015,19 @@ warning 6002: The table/view 'SjLabs.dbo.V#User' does not have a primary key def
             <Parameter Name="KitId" Mode="In" Type="Decimal" />
           </FunctionImport>
           <FunctionImport Name="RankAchievers">
-            <Parameter Name="SessID" Mode="In" Type="Decimal" />
+          <Parameter Name="SessID" Mode="In" Type="Decimal" />
           </FunctionImport>
           <FunctionImport Name="RewardInc">
-            <Parameter Name="SessID" Mode="In" Type="Decimal" />
+          <Parameter Name="SessID" Mode="In" Type="Decimal" />
           </FunctionImport>
           <FunctionImport Name="Rollback_PinTransfer">
-            <Parameter Name="TransNo" Mode="In" Type="Decimal" />
+          <Parameter Name="TransNo" Mode="In" Type="Decimal" />
           </FunctionImport>
           <FunctionImport Name="RollBackData">
-            <Parameter Name="BillNo" Mode="In" Type="String" />
+          <Parameter Name="BillNo" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SBOLevel">
-            <Parameter Name="sessid" Mode="In" Type="Decimal" />
+          <Parameter Name="sessid" Mode="In" Type="Decimal" />
           </FunctionImport>
           <FunctionImport Name="Sp_Activate" ReturnType="Collection(String)">
             <Parameter Name="IDNo" Mode="In" Type="String" />
@@ -16093,10 +16035,10 @@ warning 6002: The table/view 'SjLabs.dbo.V#User' does not have a primary key def
             <Parameter Name="LegNo" Mode="In" Type="Decimal" />
           </FunctionImport>
           <FunctionImport Name="Sp_CancelActivateMembers" ReturnType="Collection(String)">
-            <Parameter Name="IDNo" Mode="In" Type="String" />
+          <Parameter Name="IDNo" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="sp_executeurl">
-            <Parameter Name="action" Mode="In" Type="String" />
+          <Parameter Name="action" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="Sp_FundTransfer" ReturnType="Collection(String)">
             <Parameter Name="FrmFormNo" Mode="In" Type="Decimal" />
@@ -16166,7 +16108,7 @@ warning 6002: The table/view 'SjLabs.dbo.V#User' does not have a primary key def
             <Parameter Name="LegNo" Mode="In" Type="Decimal" />
           </FunctionImport>
           <FunctionImport Name="sp_MemDtl" ReturnType="Collection(SjLabsModel.sp_MemDtl_Result)">
-            <Parameter Name="strWhere" Mode="In" Type="String" />
+          <Parameter Name="strWhere" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="Sp_RefLegShift">
             <Parameter Name="FormNo" Mode="In" Type="Decimal" />
@@ -16179,7 +16121,7 @@ warning 6002: The table/view 'SjLabs.dbo.V#User' does not have a primary key def
             <Parameter Name="LegNo" Mode="In" Type="Decimal" />
           </FunctionImport>
           <FunctionImport Name="sp_RollBackTopUp">
-            <Parameter Name="IdNo" Mode="In" Type="Decimal" />
+          <Parameter Name="IdNo" Mode="In" Type="Decimal" />
           </FunctionImport>
           <FunctionImport Name="sp_ShowDownLine" ReturnType="Collection(SjLabsModel.sp_ShowDownLine_Result)">
             <Parameter Name="FormNo" Mode="In" Type="Decimal" />
@@ -16210,8 +16152,9 @@ warning 6002: The table/view 'SjLabs.dbo.V#User' does not have a primary key def
             <Parameter Name="Reason" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="WeeklyPayoutCFPoint">
-            <Parameter Name="sessid" Mode="In" Type="Decimal" />
+          <Parameter Name="sessid" Mode="In" Type="Decimal" />
           </FunctionImport>
+          <EntitySet Name="M_AppUser" EntityType="SjLabsModel.M_AppUser" />
         </EntityContainer>
         <ComplexType Name="Sp_IssueEpins_Result">
           <Property Type="Decimal" Name="TransNo" Nullable="false" Precision="18" Scale="0" />
@@ -16428,6 +16371,17 @@ warning 6002: The table/view 'SjLabs.dbo.V#User' does not have a primary key def
           <Property Type="String" Name="BlockedStatus" Nullable="false" MaxLength="9" />
           <Property Type="Decimal" Name="uplinerformno" Nullable="false" Precision="18" Scale="0" />
         </ComplexType>
+        <EntityType Name="M_AppUser">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Decimal" Nullable="false" Precision="18" Scale="0" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="OTP" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="RecTimeStamp" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ActiveStatus" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="Retry" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -16799,6 +16753,12 @@ warning 6002: The table/view 'SjLabs.dbo.V#User' does not have a primary key def
           <EntitySetMapping Name="M_MemberMaster">
             <EntityTypeMapping TypeName="SjLabsModel.M_MemberMaster">
               <MappingFragment StoreEntitySet="M_MemberMaster">
+                <ScalarProperty Name="FormFrontVerify" ColumnName="FormFrontVerify" />
+                <ScalarProperty Name="FormBackVerify" ColumnName="FormBackVerify" />
+                <ScalarProperty Name="FormBackDate" ColumnName="FormBackDate" />
+                <ScalarProperty Name="FormFrontDate" ColumnName="FormFrontDate" />
+                <ScalarProperty Name="FormBackSide" ColumnName="FormBackSide" />
+                <ScalarProperty Name="FormFrontSide" ColumnName="FormFrontSide" />
                 <ScalarProperty Name="MId" ColumnName="MId" />
                 <ScalarProperty Name="SessId" ColumnName="SessId" />
                 <ScalarProperty Name="TransNo" ColumnName="TransNo" />
@@ -17626,18 +17586,6 @@ warning 6002: The table/view 'SjLabs.dbo.V#User' does not have a primary key def
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="KitId" ColumnName="KitId" />
                 <ScalarProperty Name="EntryDate" ColumnName="EntryDate" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="M_AppUser">
-            <EntityTypeMapping TypeName="SjLabsModel.M_AppUser">
-              <MappingFragment StoreEntitySet="M_AppUser">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
-                <ScalarProperty Name="OTP" ColumnName="OTP" />
-                <ScalarProperty Name="RecTimeStamp" ColumnName="RecTimeStamp" />
-                <ScalarProperty Name="ActiveStatus" ColumnName="ActiveStatus" />
-                <ScalarProperty Name="Retry" ColumnName="Retry" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -18633,6 +18581,12 @@ warning 6002: The table/view 'SjLabs.dbo.V#User' does not have a primary key def
           <EntitySetMapping Name="TempMemberMasters">
             <EntityTypeMapping TypeName="SjLabsModel.TempMemberMaster">
               <MappingFragment StoreEntitySet="TempMemberMaster">
+                <ScalarProperty Name="FormFrontVerify" ColumnName="FormFrontVerify" />
+                <ScalarProperty Name="FormBackVerify" ColumnName="FormBackVerify" />
+                <ScalarProperty Name="FormBackDate" ColumnName="FormBackDate" />
+                <ScalarProperty Name="FormFrontDate" ColumnName="FormFrontDate" />
+                <ScalarProperty Name="FormBackSide" ColumnName="FormBackSide" />
+                <ScalarProperty Name="FormFrontSide" ColumnName="FormFrontSide" />
                 <ScalarProperty Name="AID" ColumnName="AID" />
                 <ScalarProperty Name="MId" ColumnName="MId" />
                 <ScalarProperty Name="SessId" ColumnName="SessId" />
@@ -21106,6 +21060,18 @@ warning 6002: The table/view 'SjLabs.dbo.V#User' does not have a primary key def
           <FunctionImportMapping FunctionImportName="sp_TreeUpdate" FunctionName="SjLabsModel.Store.sp_TreeUpdate" />
           <FunctionImportMapping FunctionImportName="TopUpCancel" FunctionName="SjLabsModel.Store.TopUpCancel" />
           <FunctionImportMapping FunctionImportName="WeeklyPayoutCFPoint" FunctionName="SjLabsModel.Store.WeeklyPayoutCFPoint" />
+          <EntitySetMapping Name="M_AppUser">
+            <EntityTypeMapping TypeName="SjLabsModel.M_AppUser">
+              <MappingFragment StoreEntitySet="M_AppUser">
+                <ScalarProperty Name="Retry" ColumnName="Retry" />
+                <ScalarProperty Name="ActiveStatus" ColumnName="ActiveStatus" />
+                <ScalarProperty Name="RecTimeStamp" ColumnName="RecTimeStamp" />
+                <ScalarProperty Name="OTP" ColumnName="OTP" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

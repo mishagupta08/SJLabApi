@@ -90,7 +90,6 @@ namespace SJLabEntity
         public virtual DbSet<M_AcitiveDeActive> M_AcitiveDeActive { get; set; }
         public virtual DbSet<M_ActiveDeActivePinStatus> M_ActiveDeActivePinStatus { get; set; }
         public virtual DbSet<M_ActiveDeActiveReason> M_ActiveDeActiveReason { get; set; }
-        public virtual DbSet<M_AppUser> M_AppUser { get; set; }
         public virtual DbSet<M_Award> M_Award { get; set; }
         public virtual DbSet<M_AwardFinal> M_AwardFinal { get; set; }
         public virtual DbSet<M_AwardMaster> M_AwardMaster { get; set; }
@@ -238,6 +237,7 @@ namespace SJLabEntity
         public virtual DbSet<V_TransferredPinDetail> V_TransferredPinDetail { get; set; }
         public virtual DbSet<V_TriangularIDs> V_TriangularIDs { get; set; }
         public virtual DbSet<V_User> V_User { get; set; }
+        public virtual DbSet<M_AppUser> M_AppUser { get; set; }
     
         [DbFunction("SjLabsEntities", "MyTeamData")]
         public virtual IQueryable<MyTeamData_Result> MyTeamData(Nullable<int> formNo)

@@ -11,5 +11,8 @@ namespace SJLABSAPI.Models
         public string userid { get; set; }
         public string reqtype { get; set; }
         public string passwd { get; set; }
+        public string mobile { get; set; }
+        public string memberid { get; set; }
+
     }
 }
