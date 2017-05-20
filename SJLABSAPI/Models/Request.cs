@@ -15,6 +15,8 @@ namespace SJLABSAPI.Models
         public string memberid { get; set; }
         public string npasswd { get; set; }
         public string formno { get; set; }
+        public decimal? countrycode { get; set; }
+        public decimal? statecode { get; set; }
 
     }
 }

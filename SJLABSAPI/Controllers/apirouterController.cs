@@ -16,83 +16,155 @@ namespace SJLABSAPI.Controllers
     public class apirouterController : ApiController
     {
         UserService userservice;
-        LedgerService ledgerservice;
-        ProductService productservice;
+        ApiService apiservice;
         // POST: api/ApiRouter
         public JObject Post([FromBody]Request request)
         {
             userservice = new UserService();
-            ledgerservice = new LedgerService();
-            productservice = new ProductService();
+            apiservice = new ApiService();
+
             string response = "{\"response\":\"FAILED\"}";
+
+            if (String.IsNullOrEmpty(request.reqtype))
+            {
+                return JObject.Parse(response);
+            }
+
             switch (request.reqtype)
             {
                 case "fillkit":
                     if (!string.IsNullOrEmpty(request.userid) && !string.IsNullOrEmpty(request.passwd) && userservice.UserExists(request.userid, request.passwd))
                     {
-                        response = productservice.GetProductList();
-                    }                                        
-                    break;
-                case "fillbalance":
-                    if (!string.IsNullOrEmpty(request.userid) && !string.IsNullOrEmpty(request.passwd) && !string.IsNullOrEmpty(request.formno) && userservice.UserExists(request.userid, request.passwd))
+                        response = apiservice.GetProductList();
+                    }
+                    else
                     {
-                        response = productservice.getbalance(request.formno);
+                        response = "{\"response\":\"FAILED\",\"msg\":\"Invalid Login Details.\"}";
                     }
                     break;
-                case "filldeliverycenter":
+                case "getacsumm":
                     if (!string.IsNullOrEmpty(request.userid) && !string.IsNullOrEmpty(request.passwd) && userservice.UserExists(request.userid, request.passwd))
                     {
-                        response = ledgerservice.GetDeliveryAddressList();
+                        response = apiservice.getbalance(request.userid);
+                    }
+                    else
+                    {
+                        response = "{\"response\":\"FAILED\",\"msg\":\"Invalid Login Details.\"}";
+                    }
+                    break;
+                case "delvptlist":
+                    if (!string.IsNullOrEmpty(request.userid) && !string.IsNullOrEmpty(request.passwd) && userservice.UserExists(request.userid, request.passwd))
+                    {
+                        response = apiservice.GetDeliveryAddressList();
+                    }
+                    else
+                    {
+                        response = "{\"response\":\"FAILED\",\"msg\":\"Invalid Login Details.\"}";
                     }
                     break;
                 case "reqotp":
                     if (!string.IsNullOrEmpty(request.mobile))
                     {
-                        response = ledgerservice.getOTP(request.mobile);
+                        response = apiservice.getOTP(request.mobile);
                     }
                     break;
                 case "getmemname":
                     if (!string.IsNullOrEmpty(request.memberid))
                     {
-                        response = ledgerservice.GetName(request.memberid);
+                        response = apiservice.GetName(request.memberid);
                     }
                     break;
                 case "getappversion":
-                    response = ledgerservice.GetAppVersion();
+                    response = apiservice.GetAppVersion();
                     break;
                 case "reqlogin":
                     if (!string.IsNullOrEmpty(request.userid) && !string.IsNullOrEmpty(request.passwd))
                     {
-                        response = ledgerservice.checklogin(request.userid, request.passwd);
+                        response = apiservice.checklogin(request.userid, request.passwd);
                     }
                     break;
                 case "validotp":
                     if (!string.IsNullOrEmpty(request.userid) && !string.IsNullOrEmpty(request.passwd))
                     {
-                        response = ledgerservice.validotp(request.userid, request.passwd);
+                        response = apiservice.validotp(request.userid, request.passwd);
                     }
                     break;
                 case "setpasswd":
                     if (!string.IsNullOrEmpty(request.userid) && !string.IsNullOrEmpty(request.passwd))
                     {
-                        response = ledgerservice.setpasswd(request.userid, request.passwd);
+                        response = apiservice.setpasswd(request.userid, request.passwd);
                     }
                     break;
                 case "getsession":
-                    response = ledgerservice.GetSession();
+                    response = apiservice.GetSession();
                     break;
                 case "myteam":
-                    if (!string.IsNullOrEmpty(request.userid) && !string.IsNullOrEmpty(request.passwd))
+                    if (!string.IsNullOrEmpty(request.userid) && !string.IsNullOrEmpty(request.passwd) && userservice.UserExists(request.userid, request.passwd))
                     {
-                        response = ledgerservice.TeamDetail(request.userid, request.passwd);
+                        response = apiservice.TeamDetail(request.userid);
+                    }
+                    else
+                    {
+                        response = "{\"response\":\"FAILED\",\"msg\":\"Invalid Login Details.\"}";
                     }
                     break;
-                case "cpassword":
-                    //response = ledgerservice.ChangePassword(request.userid, request.passwd,request.npasswd);
-                    break;  
-                                      
+                case "cpassword":                   
+                    if (!string.IsNullOrEmpty(request.userid) && !string.IsNullOrEmpty(request.passwd) && userservice.UserExists(request.userid, request.passwd))
+                    {
+                        if (!string.IsNullOrEmpty(request.npasswd))
+                        {
+                            response = apiservice.ChangePassword(request.userid, request.passwd, request.npasswd);
+                        }
+                    }
+                    else
+                    {
+                        response = "{\"response\":\"FAILED\",\"msg\":\"Invalid Login Details.\"}";
+                    }
+                    break;
+                case "forgot":
+                    if (!string.IsNullOrEmpty(request.userid)) {
+                        response = apiservice.forgot(request.userid);
+                    }                    
+                    break;
+                case "country":
+                    if (!string.IsNullOrEmpty(request.userid) && !string.IsNullOrEmpty(request.passwd) && userservice.UserExists(request.userid, request.passwd))
+                    {
+                        response = apiservice.countrylist();
+                    }
+                    else
+                    {
+                        response = "{\"response\":\"FAILED\",\"msg\":\"Invalid Login Details.\"}";
+                    }
+                    break;
+                case "statelist":
+                    if (!string.IsNullOrEmpty(request.userid) && !string.IsNullOrEmpty(request.passwd) && userservice.UserExists(request.userid, request.passwd))
+                    {
+                        if (request.countrycode != null)
+                        {
+                            response = apiservice.statelist(request.countrycode);
+                        }
+                    }
+                    else
+                    {
+                        response = "{\"response\":\"FAILED\",\"msg\":\"Invalid Login Details.\"}";
+                    }
+                    break;
+                case "citylist":
+                    if (!string.IsNullOrEmpty(request.userid) && !string.IsNullOrEmpty(request.passwd) && userservice.UserExists(request.userid, request.passwd))
+                    {
+                        if (request.statecode!=null)
+                        {
+                            response = apiservice.citylist(request.statecode);
+                        }
+                    }
+                    else
+                    {
+                        response = "{\"response\":\"FAILED\",\"msg\":\"Invalid Login Details.\"}";
+                    }
+                    break;
+
             }
             return JObject.Parse(response);
-        }        
+        }
     }
 }

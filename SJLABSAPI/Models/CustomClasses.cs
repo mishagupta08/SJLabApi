@@ -17,7 +17,7 @@ namespace SJLABSAPI.Models
 
     public class DeliveryAddressList
     {
-        public string id { get; set; }
-        public string name { get; set; }
+        public string delvcode { get; set; }
+        public string centername { get; set; }
     }
 }
