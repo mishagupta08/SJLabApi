@@ -25,7 +25,7 @@ namespace SJLABSAPI.Controllers
 
             string response = "{\"response\":\"FAILED\"}";
 
-            if (String.IsNullOrEmpty(request.reqtype))
+            if (request==null || String.IsNullOrEmpty(request.reqtype))
             {
                 return JObject.Parse(response);
             }
@@ -156,6 +156,48 @@ namespace SJLABSAPI.Controllers
                         {
                             response = apiservice.citylist(request.statecode);
                         }
+                    }
+                    else
+                    {
+                        response = "{\"response\":\"FAILED\",\"msg\":\"Invalid Login Details.\"}";
+                    }
+                    break;
+
+                case "paymentdetails":
+                    if (!string.IsNullOrEmpty(request.userid) && !string.IsNullOrEmpty(request.passwd) && userservice.UserExists(request.userid, request.passwd))
+                    {
+                        response = apiservice.PaymentDetails(request.userid);
+                    }
+                    else
+                    {
+                        response = "{\"response\":\"FAILED\",\"msg\":\"Invalid Login Details.\"}";
+                    }
+                    break;
+
+                case "productrequest":
+                    if (!string.IsNullOrEmpty(request.userid) && !string.IsNullOrEmpty(request.passwd) && userservice.UserExists(request.userid, request.passwd))
+                    {
+                        response = apiservice.productrequest(request);
+                    }
+                    else
+                    {
+                        response = "{\"response\":\"FAILED\",\"msg\":\"Invalid Login Details.\"}";
+                    }
+                    break;
+                case "fillmainbalance":
+                    if (!string.IsNullOrEmpty(request.userid) && !string.IsNullOrEmpty(request.passwd) && userservice.UserExists(request.userid, request.passwd))
+                    {
+                        response = apiservice.FillMainBalance(request.userid);
+                    }
+                    else
+                    {
+                        response = "{\"response\":\"FAILED\",\"msg\":\"Invalid Login Details.\"}";
+                    }
+                    break;
+                case "fillrepurchasebalance":
+                    if (!string.IsNullOrEmpty(request.userid) && !string.IsNullOrEmpty(request.passwd) && userservice.UserExists(request.userid, request.passwd))
+                    {
+                        response = apiservice.FillRepurchaseBalance(request.userid);
                     }
                     else
                     {

@@ -5,10 +5,9 @@ using SJLInvEntity;
 using SJLABSAPI.Models;
 using SJLabEntity;
 using System.Data.Entity;
-using System.Net;
-using System.IO;
 using Newtonsoft.Json;
 using System.Data.SqlClient;
+using System.Web;
 
 namespace SJLABSAPI.Service
 {
@@ -374,8 +373,7 @@ namespace SJLABSAPI.Service
                 using (conn = new SqlConnection(sConnectionString))
                 {
                     conn.Open();
-                    sqlCmd = new SqlCommand("Select * From dbo.ufnGetBalance('" + userId + "', 'M')", conn);
-                    conn.Open();
+                    sqlCmd = new SqlCommand("Select * From dbo.ufnGetBalance('" + userId + "', 'M')", conn);                    
                     dr = sqlCmd.ExecuteReader();
                     while (dr.Read())
                     {
@@ -384,6 +382,63 @@ namespace SJLABSAPI.Service
                     dr.Close();
                 }
 
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.InnerException);
+                dr.Close();
+                conn.Close();
+            }
+            return response;
+        }
+
+        public string FillRepurchaseBalance(string userid)
+        {
+            string response = "{\"response\":\"FAILED\"}";
+            uService = new UserService();
+            try
+            {
+                decimal formno = uService.GetFormNo(userid);
+                using (conn = new SqlConnection(sConnectionString))
+                {
+                    conn.Open();
+                    sqlCmd = new SqlCommand("Select * From dbo.ufnGetBalance('" + formno + "', 'R')", conn);                    
+                    dr = sqlCmd.ExecuteReader();
+                    while (dr.Read())
+                    {
+                        response = "{\"rbalance\":\"" + dr["Balance"] + "\",\"response\":\"OK\"}";
+                    }
+                    dr.Close();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.InnerException);
+                dr.Close();
+                conn.Close();
+            }
+            return response;
+        }
+
+        public string FillMainBalance(string userid)
+        {
+            uService = new UserService();
+            string response = "{\"response\":\"FAILED\"}";
+            try
+            {
+                decimal formno = uService.GetFormNo(userid);
+                using (conn = new SqlConnection(sConnectionString))
+                {
+                    conn.Open();
+                    sqlCmd = new SqlCommand("Select * From dbo.ufnGetBalance('" + formno + "', 'M')", conn);
+                    dr = sqlCmd.ExecuteReader();
+                    while (dr.Read())
+                    {
+                        response = "{\"balance\":\"" + dr["Balance"] + "\",\"response\":\"OK\"}";
+                    }
+                    dr.Close();
+                }
             }
             catch (Exception ex)
             {
@@ -561,8 +616,140 @@ namespace SJLABSAPI.Service
             return response;
         }
 
-       
+        public string PaymentDetails(string userid)
+        {
+            string response = "{\"response\":\"FAILED\"}";
+            uService = new UserService();
+            try
+            {
+                using (var db = new SjLabsEntities())
+                {
+                    decimal formno = uService.GetFormNo(userid);
+                    var list = (from r in db.TrnOrders where r.ORDERTYPE.ToUpper() == "O" && r.FormNo == formno select 
+                                new {
+                                    orderno = r.OrderNo,
+                                    orderdate = r.OrderDate,
+                                    orderqty= r.OrderQty,
+                                    ordeeramt= r.OrderAmt,
+                                    bankamt = r.BankAmt,
+                                    otheramt=r.OtherAmt,
+                                    walletamt = r.WalletAmt,
+                                    remark = r.Remark,
+                                    status = r.DispatchStatus == "Y"?"Dispatched":"Pending",
+                                }).ToList();
+                    response = "{\"orders\":" + JsonConvert.SerializeObject(list) + ",\"response\":\"OK\"}";
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.InnerException);
+            }
+            return response;
+        }
+        
+        public string productrequest(Request productrequest)
+        {
+            string response = "{\"response\":\"FAILED\"}";
+            uService = new UserService();
+            try
+            {
+                decimal formNo = uService.GetFormNo(productrequest.userid);
+                decimal FSessId = 0;
+                decimal orderno = 100001;
+                decimal voucherno = 1001;
+                decimal TotalOrder = 0;
+                decimal TotalQty = 0;
+                decimal TotalAmount = 0;
+                int c = 0;
+                string query = string.Empty;
+                using (var db = new SJLInvEntities())
+                {
+                    var FSess = (from r in db.M_FiscalMaster select r).OrderByDescending(o => o.FSessId).FirstOrDefault();
+                    FSessId = FSess.FSessId;
+                }
+
+                using (var db = new SjLabsEntities())
+                {
+                    var order = (from r in db.TrnOrders where r.ORDERTYPE == "O" select r).OrderByDescending(o => o.OrderNo).FirstOrDefault();
+                    if (order != null)
+                    {
+                        orderno = order.OrderNo + 1;
+                    }                 
+                }
+
+                M_ProductMaster product = null;
+                foreach (TrnorderDetailList orderrow in productrequest.trnorderdetaillist)
+                {
+                    product = GetProductDetail(orderrow.productid);
+                    query = "Insert Into TrnorderDetail(OrderNo,FormNo,ProductID,Qty,Rate,NetAmount,RecTimeStamp,DispDate,DispStatus,DispQty,RemQty,DispAmt,MRP,DP,ProductName,ImgPath,RP,BV,FSEssId)";
+                    query += " Values('" + orderno + "','" + formNo + "','" + orderrow.productid + "','" + orderrow.qty + "','" + orderrow.rate + "','" + (product.DP * orderrow.qty) + "',Getdate(),'','P',0,'" + orderrow.qty + "',0,";
+                    query += " '" + product.MRP +"','" + product.DP + "','" + product.ProductName + "','','" + (product.RP* orderrow.qty) + "','" + (product.BV * orderrow.qty) + "','1' )";
+                    TotalOrder = TotalOrder + 1;
+                    TotalAmount = TotalAmount + (product.DP * orderrow.qty);
+                    TotalQty = TotalQty + orderrow.qty;
+                    c = c + 1;
+               }
+
+                if (productrequest.wamt > 0)
+                {
+                    query = query + "INSERT INTO TrnVoucher(VoucherNo,VoucherDate,DrTo,CrTo,Amount,Narration,RefNo,AcType,VTYpe,SessID,WSessID) SELECT ISNULL(Max(VoucherNo)+1,1001),'" + DateTime.Now.ToString("dd-MMM-yyyy") + "','";
+                    query = query + formNo + "','0'," + productrequest.wamt + ",'Amount deducted by Product Request Req.No.:" + orderno + ".','Req/" + formNo + "','M','D',Convert(Varchar,Getdate(),112),'" + Convert.ToString(HttpContext.Current.Session["CurrentSessn"]) + "' FROM TrnVoucher;";
+                }
+
+                if (productrequest.repurchase > 0)
+                {
+                    query = query + "INSERT INTO TrnVoucher(VoucherNo,VoucherDate,DrTo,CrTo,Amount,Narration,RefNo,AcType,VTYpe,SessID,WSessID) SELECT ISNULL(Max(VoucherNo)+1,1001),'" + DateTime.Now.ToString("dd-MMM-yyyy") + "','";
+                    query = query + formNo + "','0'," + productrequest.repurchase + ",'Amount deducted by Product Request Req.No.:" + orderno + ".','Req/" + formNo + "','R','D',Convert(Varchar,Getdate(),112),'" + Convert.ToString(HttpContext.Current.Session["CurrentSessn"]) + "' FROM TrnVoucher;";
+                }
                 
+                query = query + "Insert INTO TrnOrder(OrderNo,OrderDate,MemFirstName,MemLastName,Address1,Address2,CountryID,CountryName,StateCode,City,PinCode,";
+                query = query + " Mobl,EMail,FormNo,UserType,Passw,PayMode,ChDDNo,ChDate,ChAmt,BankName,BranchName,Remark,OrderAmt,OrderItem,";
+                query = query + " OrderQty,ActiveStatus,HostIp,RecTimeStamp,IsTransfer,DispatchDate,DispatchStatus,DispatchQty,RemainQty,";
+                query = query + " DispatchAmount,Shipping,SessID,RewardPoint,CourierName,DocketNo,OrderFor,IsConfirm,OrderType,Discount,OldShipping,ShippingStatus,IdNo,FSessId,BankAmt,OtherAmt,WalletAmt)";
+                query = query + " select '" + orderno + "',Cast(Convert(varchar,GETDATE(),106) as Datetime),MemFirstName , MemLastName , '" + productrequest.address1 + "' , Address2 , CountryID , CountryName , StateCode , City , Case when PinCode='' then 0 else Pincode  end as Pincode ,";
+                query = query + " Mobl, EMail ,'" + formNo + "','', Passw ,'',0,'',0,'','','" + productrequest.remarks + "','" + TotalAmount + "','" + TotalOrder + "','" + TotalQty + "',";
+                query = query + "'Y','" + productrequest.delvby + "',Getdate(),'Y','','N',0,'" + TotalQty + "',0,0,'" + Convert.ToString(HttpContext.Current.Session["CurrentSessn"]) + "',0,'',0,'" + productrequest.partycode + "','Y','O',0,0,'Y','" + productrequest.idno + "','" + FSessId + "','0','" + productrequest.repurchase + "','" + productrequest.wamt + "' from M_memberMaster where formno='" + formNo + "'";
+
+                query = query + " insert into UserHistory(UserId,UserName,PageName,Activity,ModifiedFlds,RecTimeStamp,Memberid)Values";
+                query = query + "('" + formNo + "','" + productrequest.memname + "','Product Request','Product Request',' Product Request For Order No " + orderno + " ',Getdate()," + formNo + ")";
+                query = query + " Insert into SJLInv..TrnPaymentConfirmation(SNo,ConfirmBy,OrderNo,FormNo,OrderAmt,IsConfirm,RecTimeStamp,UserID,OrderFor,";
+                query = query + " IDNO,ActiveStatus,OrdType,FSessId)select Case When Max(SNo) Is Null Then '1001' Else Max(SNo)+1 END as SNo,'WR','" + orderno + "',";
+                query = query + "  '" + formNo + "','" + TotalAmount + "','Y',Getdate(),0,'WR','" + productrequest.idno + "','Y','D',1 from  " + "SJLInv..TrnPaymentConfirmation";
+                query = query + " Exec " + "SJLInv..Dispatchorder " + orderno + ";";
+
+                using (conn = new SqlConnection(sConnectionString))
+                {
+                    conn.Open();
+                    sqlCmd = new SqlCommand(query, conn);
+                    int i = sqlCmd.ExecuteNonQuery();
+                    if (i != 0)
+                    {
+                        response = "{\"response\":\"OK\"}";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.InnerException);
+            }
+            return response;
+        }
+
+        public M_ProductMaster GetProductDetail(decimal productId) {
+            M_ProductMaster product = new M_ProductMaster();
+            try
+            {
+                using (var db = new SJLInvEntities())
+                {
+                    product = (from r in db.M_ProductMaster where r.ActiveStatus == "Y" && r.OnWebSite == "Y" select r).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.InnerException);
+            }
+            return product;
+        }
 
     }
 }
