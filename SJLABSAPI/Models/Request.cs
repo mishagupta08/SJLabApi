@@ -1,9 +1,4 @@
-﻿using System.Security.Claims;
-using System.Threading.Tasks;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.AspNet.Identity.Owin;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace SJLABSAPI.Models
@@ -30,9 +25,11 @@ namespace SJLABSAPI.Models
         public string idno { get; set; }
         public string address1 { get; set; }
         public string partycode { get; set; }
+        public string chequeno { get; set; }
     }
     
-    public class TrnorderDetailList {
+    public class TrnorderDetailList
+    {
         public decimal orderno { get; set; }
         public decimal formno { get; set; }
         public decimal productid { get; set; }

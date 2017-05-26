@@ -30,7 +30,7 @@ namespace SJLABSAPI.Controllers
                 return JObject.Parse(response);
             }
 
-            switch (request.reqtype)
+            switch (request.reqtype.ToLower())
             {
                 case "fillkit":
                     if (!string.IsNullOrEmpty(request.userid) && !string.IsNullOrEmpty(request.passwd) && userservice.UserExists(request.userid, request.passwd))
@@ -95,9 +95,11 @@ namespace SJLABSAPI.Controllers
                         response = apiservice.setpasswd(request.userid, request.passwd);
                     }
                     break;
+
                 case "getsession":
                     response = apiservice.GetSession();
                     break;
+
                 case "myteam":
                     if (!string.IsNullOrEmpty(request.userid) && !string.IsNullOrEmpty(request.passwd) && userservice.UserExists(request.userid, request.passwd))
                     {
@@ -108,6 +110,7 @@ namespace SJLABSAPI.Controllers
                         response = "{\"response\":\"FAILED\",\"msg\":\"Invalid Login Details.\"}";
                     }
                     break;
+
                 case "cpassword":                   
                     if (!string.IsNullOrEmpty(request.userid) && !string.IsNullOrEmpty(request.passwd) && userservice.UserExists(request.userid, request.passwd))
                     {
@@ -121,11 +124,13 @@ namespace SJLABSAPI.Controllers
                         response = "{\"response\":\"FAILED\",\"msg\":\"Invalid Login Details.\"}";
                     }
                     break;
+
                 case "forgot":
                     if (!string.IsNullOrEmpty(request.userid)) {
                         response = apiservice.forgot(request.userid);
                     }                    
                     break;
+
                 case "country":
                     if (!string.IsNullOrEmpty(request.userid) && !string.IsNullOrEmpty(request.passwd) && userservice.UserExists(request.userid, request.passwd))
                     {
@@ -136,6 +141,7 @@ namespace SJLABSAPI.Controllers
                         response = "{\"response\":\"FAILED\",\"msg\":\"Invalid Login Details.\"}";
                     }
                     break;
+
                 case "statelist":
                     if (!string.IsNullOrEmpty(request.userid) && !string.IsNullOrEmpty(request.passwd) && userservice.UserExists(request.userid, request.passwd))
                     {
@@ -149,6 +155,7 @@ namespace SJLABSAPI.Controllers
                         response = "{\"response\":\"FAILED\",\"msg\":\"Invalid Login Details.\"}";
                     }
                     break;
+
                 case "citylist":
                     if (!string.IsNullOrEmpty(request.userid) && !string.IsNullOrEmpty(request.passwd) && userservice.UserExists(request.userid, request.passwd))
                     {
@@ -184,6 +191,7 @@ namespace SJLABSAPI.Controllers
                         response = "{\"response\":\"FAILED\",\"msg\":\"Invalid Login Details.\"}";
                     }
                     break;
+
                 case "fillmainbalance":
                     if (!string.IsNullOrEmpty(request.userid) && !string.IsNullOrEmpty(request.passwd) && userservice.UserExists(request.userid, request.passwd))
                     {
@@ -194,6 +202,7 @@ namespace SJLABSAPI.Controllers
                         response = "{\"response\":\"FAILED\",\"msg\":\"Invalid Login Details.\"}";
                     }
                     break;
+
                 case "fillrepurchasebalance":
                     if (!string.IsNullOrEmpty(request.userid) && !string.IsNullOrEmpty(request.passwd) && userservice.UserExists(request.userid, request.passwd))
                     {
@@ -205,6 +214,66 @@ namespace SJLABSAPI.Controllers
                     }
                     break;
 
+                case "walletrequestdetail":
+                    if (!string.IsNullOrEmpty(request.userid) && !string.IsNullOrEmpty(request.passwd) && userservice.UserExists(request.userid, request.passwd))
+                    {
+                        response = apiservice.WalletRequestDetail(request.userid);
+                    }
+                    else
+                    {
+                        response = "{\"response\":\"FAILED\",\"msg\":\"Invalid Login Details.\"}";
+                    }
+                    break;
+
+                case "fillpaymode":
+                    if (!string.IsNullOrEmpty(request.userid) && !string.IsNullOrEmpty(request.passwd) && userservice.UserExists(request.userid, request.passwd))
+                    {
+                        response = apiservice.FillPaymode();
+                    }
+                    else
+                    {
+                        response = "{\"response\":\"FAILED\",\"msg\":\"Invalid Login Details.\"}";
+                    }
+                    break;
+
+                case "fillbank":
+                    if (!string.IsNullOrEmpty(request.userid) && !string.IsNullOrEmpty(request.passwd) && userservice.UserExists(request.userid, request.passwd))
+                    {
+                        response = apiservice.FillBankMaster();
+                    }
+                    else
+                    {
+                        response = "{\"response\":\"FAILED\",\"msg\":\"Invalid Login Details.\"}";
+                    }
+                    break;
+
+                case "ischequeexists":
+                    if (!string.IsNullOrEmpty(request.userid) && !string.IsNullOrEmpty(request.passwd) && userservice.UserExists(request.userid, request.passwd))
+                    {
+                        if (request.chequeno != null)
+                        {
+                            response = apiservice.checkChequeExistance(request.chequeno);
+                        }
+                    }
+                    else
+                    {
+                        response = "{\"response\":\"FAILED\",\"msg\":\"Invalid Login Details.\"}";
+                    }
+                    break;
+
+                case "savewalletrequest":
+                    if (!string.IsNullOrEmpty(request.userid) && !string.IsNullOrEmpty(request.passwd) && userservice.UserExists(request.userid, request.passwd))
+                    {
+                        if (request.chequeno != null)
+                        {
+                            response = apiservice.SaveWalletRequest(request);
+                        }
+                    }
+                    else
+                    {
+                        response = "{\"response\":\"FAILED\",\"msg\":\"Invalid Login Details.\"}";
+                    }
+                    break;
             }
             return JObject.Parse(response);
         }

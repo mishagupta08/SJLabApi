@@ -751,5 +751,140 @@ namespace SJLABSAPI.Service
             return product;
         }
 
+        public string WalletRequestDetail(string userid)
+        {
+            string response = "{\"response\":\"FAILED\"}";
+            uService = new UserService();
+            try
+            {
+                using (var db = new SjLabsEntities())
+                {
+                    decimal formno = uService.GetFormNo(userid);
+                    var list = (from r in db.WalletReqs join s in db.M_BankMaster on r.BankId equals s.BankCode
+                                where s.RowStatus.ToUpper() == "Y" && r.Formno == formno
+                                select new {
+                                    reqno = r.ReqNo,
+                                    reqdate = r.ReqDate,
+                                    paymode = r.Paymode,
+                                    chqno = r.ChqNo,
+                                    chqdate = r.ChqDate,
+                                    bankname= s.BankName,
+                                    branchname = s.BranchName,
+                                    status = r.IsApprove.ToUpper() == "N" ? "Pending" : r.IsApprove=="Y"? "Approve" : "Rejected",
+                                    amount = r.Amount,
+                                    remark = s.Remarks,
+                                    scannedfile = r.ScannedFile==""?"": "images/UploadImage/"+r.ScannedFile ,
+                                    scannedfilestatus = r.ScannedFile==""?false:true,
+                                    }).ToList();
+                    response = "{\"paymentdetails\":" + JsonConvert.SerializeObject(list) + ",\"response\":\"OK\"}";
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.InnerException);
+            }
+            return response;
+        }
+
+        public string FillPaymode() {
+            string response = "{\"response\":\"FAILED\"}";
+            try
+            {
+                using (var db = new SjLabsEntities())
+                {
+                   var list = (from r in db.M_PayModeMaster
+                               where r.ActiveStatus=="Y"
+                               select new {
+                                   pid= r.PId,
+                                   paymode = r.PayMode                               
+                                }).ToList();
+                    response = "{\"paymodes\":" + JsonConvert.SerializeObject(list) + ",\"response\":\"OK\"}";
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.InnerException);
+            }
+            return response;
+        }
+
+        public string FillBankMaster()
+        {
+            string response = "{\"response\":\"FAILED\"}";
+            try
+            {
+                using (var db = new SjLabsEntities())
+                {
+                    var list = (from r in db.M_BankMaster
+                                where r.ActiveStatus == "Y" && r.RowStatus =="Y" && r.BankCode == 1
+                                select new
+                                {
+                                    code = r.BankCode,
+                                    name = r.BankName
+                                }).ToList();
+                    response = "{\"banks\":" + JsonConvert.SerializeObject(list) + ",\"response\":\"OK\"}";
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.InnerException);
+            }
+            return response;
+        }
+        
+        public string checkChequeExistance(string chequeNo)
+        {
+            string response = "{\"response\":\"FAILED\"}";
+            try
+            {
+                using (var db = new SjLabsEntities())
+                {
+
+                    var list = (from r in db.WalletReqs
+                                where r.ChqNo == chequeNo
+                                select r).ToList();
+
+                    if (list != null && list.Count > 0)
+                    {
+                        response = "{\"isExists\":\"true\",\"response\":\"OK\"}";
+                    }
+                    else
+                    {
+                        response = "{\"isExists\":\"false\",\"response\":\"OK\"}";
+                    }
+                    
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.InnerException);
+            }
+            return response;
+        }
+
+        public string SaveWalletRequest(Request request)
+        {
+            string response = "{\"response\":\"FAILED\"}";
+            string query = string.Empty;
+            try
+            {
+                query = "";
+                using (conn = new SqlConnection(sConnectionString))
+                {
+                    conn.Open();
+                    sqlCmd = new SqlCommand(query, conn);
+                    int i = sqlCmd.ExecuteNonQuery();
+                    if (i != 0)
+                    {
+                        response = "{\"response\":\"OK\"}";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.InnerException);
+            }
+            return response;
+        }
     }
 }
