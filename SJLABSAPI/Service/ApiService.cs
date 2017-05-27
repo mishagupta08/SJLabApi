@@ -394,29 +394,16 @@ namespace SJLABSAPI.Service
 
         public string FillRepurchaseBalance(string userid)
         {
-            string response = "{\"response\":\"FAILED\"}";
             uService = new UserService();
+            string response = "{\"response\":\"FAILED\"}";
             try
             {
                 decimal formno = uService.GetFormNo(userid);
-                using (conn = new SqlConnection(sConnectionString))
-                {
-                    conn.Open();
-                    sqlCmd = new SqlCommand("Select * From dbo.ufnGetBalance('" + formno + "', 'R')", conn);                    
-                    dr = sqlCmd.ExecuteReader();
-                    while (dr.Read())
-                    {
-                        response = "{\"rbalance\":\"" + dr["Balance"] + "\",\"response\":\"OK\"}";
-                    }
-                    dr.Close();
-                }
-
+                response = "{\"balance\":\"" + getTypeBalance(formno, "R") + "\",\"response\":\"OK\"}";
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.InnerException);
-                dr.Close();
-                conn.Close();
             }
             return response;
         }
@@ -427,15 +414,30 @@ namespace SJLABSAPI.Service
             string response = "{\"response\":\"FAILED\"}";
             try
             {
-                decimal formno = uService.GetFormNo(userid);
+                decimal formno = uService.GetFormNo(userid);                
+                response = "{\"balance\":\"" + getTypeBalance(formno, "M") + "\",\"response\":\"OK\"}";                    
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.InnerException);                
+            }
+            return response;
+        }
+
+        private decimal getTypeBalance(decimal formno, string type)
+        {
+            uService = new UserService();
+            decimal response = 0;
+            try
+            {
                 using (conn = new SqlConnection(sConnectionString))
                 {
                     conn.Open();
-                    sqlCmd = new SqlCommand("Select * From dbo.ufnGetBalance('" + formno + "', 'M')", conn);
+                    sqlCmd = new SqlCommand("Select * From dbo.ufnGetBalance('" + formno + "','"+ type + "')", conn);
                     dr = sqlCmd.ExecuteReader();
-                    while (dr.Read())
+                    if (dr.Read())
                     {
-                        response = "{\"balance\":\"" + dr["Balance"] + "\",\"response\":\"OK\"}";
+                        response = Convert.ToDecimal(dr["Balance"]);
                     }
                     dr.Close();
                 }
@@ -653,13 +655,16 @@ namespace SJLABSAPI.Service
             uService = new UserService();
             try
             {
-                decimal formNo = uService.GetFormNo(productrequest.userid);
+                decimal formNo = uService.GetFormNo(productrequest.idno);
                 decimal FSessId = 0;
                 decimal orderno = 100001;
-                decimal voucherno = 1001;
                 decimal TotalOrder = 0;
                 decimal TotalQty = 0;
                 decimal TotalAmount = 0;
+                decimal Ledgerid = 0;
+                decimal RBalance = 0;
+                decimal MBalance = 0;
+                decimal TAmount = 0;
                 int c = 0;
                 string query = string.Empty;
                 using (var db = new SJLInvEntities())
@@ -674,8 +679,21 @@ namespace SJLABSAPI.Service
                     if (order != null)
                     {
                         orderno = order.OrderNo + 1;
-                    }                 
+                    }
+
+                   var Ledger = (from r in db.Ac_LedgerMaster where r.LedgerName == productrequest.partycode && r.ActiveStatus == "Y" select r).FirstOrDefault();
+                    if (Ledger != null)
+                    {
+                        Ledgerid = Ledger.LedgerID;
+                    }
+                }                
+
+                if (productrequest.requestfor.ToUpper()=="S")
+                {
+                    RBalance = getTypeBalance(formNo,"R");
                 }
+
+                MBalance = getTypeBalance(formNo, "M");               
 
                 M_ProductMaster product = null;
                 foreach (TrnorderDetailList orderrow in productrequest.trnorderdetaillist)
@@ -696,11 +714,12 @@ namespace SJLABSAPI.Service
                     query = query + formNo + "','0'," + productrequest.wamt + ",'Amount deducted by Product Request Req.No.:" + orderno + ".','Req/" + formNo + "','M','D',Convert(Varchar,Getdate(),112),'" + Convert.ToString(HttpContext.Current.Session["CurrentSessn"]) + "' FROM TrnVoucher;";
                 }
 
-                if (productrequest.repurchase > 0)
+                if (productrequest.requestfor.ToUpper()=="S" && productrequest.repurchase > 0)
                 {
                     query = query + "INSERT INTO TrnVoucher(VoucherNo,VoucherDate,DrTo,CrTo,Amount,Narration,RefNo,AcType,VTYpe,SessID,WSessID) SELECT ISNULL(Max(VoucherNo)+1,1001),'" + DateTime.Now.ToString("dd-MMM-yyyy") + "','";
                     query = query + formNo + "','0'," + productrequest.repurchase + ",'Amount deducted by Product Request Req.No.:" + orderno + ".','Req/" + formNo + "','R','D',Convert(Varchar,Getdate(),112),'" + Convert.ToString(HttpContext.Current.Session["CurrentSessn"]) + "' FROM TrnVoucher;";
                 }
+
                 
                 query = query + "Insert INTO TrnOrder(OrderNo,OrderDate,MemFirstName,MemLastName,Address1,Address2,CountryID,CountryName,StateCode,City,PinCode,";
                 query = query + " Mobl,EMail,FormNo,UserType,Passw,PayMode,ChDDNo,ChDate,ChAmt,BankName,BranchName,Remark,OrderAmt,OrderItem,";
@@ -708,14 +727,20 @@ namespace SJLABSAPI.Service
                 query = query + " DispatchAmount,Shipping,SessID,RewardPoint,CourierName,DocketNo,OrderFor,IsConfirm,OrderType,Discount,OldShipping,ShippingStatus,IdNo,FSessId,BankAmt,OtherAmt,WalletAmt)";
                 query = query + " select '" + orderno + "',Cast(Convert(varchar,GETDATE(),106) as Datetime),MemFirstName , MemLastName , '" + productrequest.address1 + "' , Address2 , CountryID , CountryName , StateCode , City , Case when PinCode='' then 0 else Pincode  end as Pincode ,";
                 query = query + " Mobl, EMail ,'" + formNo + "','', Passw ,'',0,'',0,'','','" + productrequest.remarks + "','" + TotalAmount + "','" + TotalOrder + "','" + TotalQty + "',";
-                query = query + "'Y','" + productrequest.delvby + "',Getdate(),'Y','','N',0,'" + TotalQty + "',0,0,'" + Convert.ToString(HttpContext.Current.Session["CurrentSessn"]) + "',0,'',0,'" + productrequest.partycode + "','Y','O',0,0,'Y','" + productrequest.idno + "','" + FSessId + "','0','" + productrequest.repurchase + "','" + productrequest.wamt + "' from M_memberMaster where formno='" + formNo + "'";
+                query = query + "'Y','" + productrequest.delvby + "',Getdate(),'Y','','N',0,'" + TotalQty + "',0,0,'" + Convert.ToString(HttpContext.Current.Session["CurrentSessn"]) + "',0,'',0,'" + productrequest.partycode + "','Y','O',0,"+formNo+",'Y','" + productrequest.idno + "','" + FSessId + "','0','" + productrequest.repurchase + "','" + productrequest.wamt + "' from M_memberMaster where formno='" + formNo + "'";
 
                 query = query + " insert into UserHistory(UserId,UserName,PageName,Activity,ModifiedFlds,RecTimeStamp,Memberid)Values";
                 query = query + "('" + formNo + "','" + productrequest.memname + "','Product Request','Product Request',' Product Request For Order No " + orderno + " ',Getdate()," + formNo + ")";
+                
                 query = query + " Insert into SJLInv..TrnPaymentConfirmation(SNo,ConfirmBy,OrderNo,FormNo,OrderAmt,IsConfirm,RecTimeStamp,UserID,OrderFor,";
                 query = query + " IDNO,ActiveStatus,OrdType,FSessId)select Case When Max(SNo) Is Null Then '1001' Else Max(SNo)+1 END as SNo,'WR','" + orderno + "',";
-                query = query + "  '" + formNo + "','" + TotalAmount + "','Y',Getdate(),0,'WR','" + productrequest.idno + "','Y','D',1 from  " + "SJLInv..TrnPaymentConfirmation";
-                query = query + " Exec " + "SJLInv..Dispatchorder " + orderno + ";";
+                query = query + "  '" + formNo + "','" + TotalAmount + "','Y',Getdate(),0,'WR','" + productrequest.idno + "','Y','D',1 from  " + "SJLInv..TrnPaymentConfirmation";                               
+
+                query += " insert into Ac_TrnVoucher(VoucherID, VoucherDate, LedgerID, VTID, CrAmt, DrAmt, FrmLedgerID, Paymode, RefNo, ActiveStatus, RecTimeStamp)";
+                query += " select Case When Max(VoucherId) Is Null Then '1' Else Max(VoucherId)+1 END as VoucherId ,Getdate(),'" + formNo + "','8',0,'" + TotalAmount + "'," + Ledgerid + "," ;
+                query += "'','" + Convert.ToString(HttpContext.Current.Session["CurrentSessn"]) + "/" + formNo + "','Y',Getdate() from Ac_TrnVoucher ";
+
+               query = query + " Exec " + "SJLInv..Dispatchorder " + orderno + ";";
 
                 using (conn = new SqlConnection(sConnectionString))
                 {
@@ -878,6 +903,28 @@ namespace SJLABSAPI.Service
                     {
                         response = "{\"response\":\"OK\"}";
                     }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.InnerException);
+            }
+            return response;
+        }
+
+        public string GetFormNo(string userId)
+        {
+            string response = "{\"response\":\"FAILED\"}";
+            try
+            {
+                using (var db = new SjLabsEntities())
+                {
+                    var record = (from r in db.M_MemberMaster where r.IdNo == userId select new {
+                        formno = r.FormNo,
+                        fname = r.MemFirstName,
+                        lanme = r.MemLastName
+                    }).FirstOrDefault();
+                    response = "{\"formno\":\""+record.formno+"\",memname\":\""+record.fname + " "+record.lanme + "\",\"response\":\"OK\"}";
                 }
             }
             catch (Exception ex)

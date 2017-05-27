@@ -263,11 +263,21 @@ namespace SJLABSAPI.Controllers
 
                 case "savewalletrequest":
                     if (!string.IsNullOrEmpty(request.userid) && !string.IsNullOrEmpty(request.passwd) && userservice.UserExists(request.userid, request.passwd))
+                    {                        
+                            response = apiservice.SaveWalletRequest(request);                        
+                    }
+                    else
                     {
-                        if (request.chequeno != null)
-                        {
-                            response = apiservice.SaveWalletRequest(request);
-                        }
+                        response = "{\"response\":\"FAILED\",\"msg\":\"Invalid Login Details.\"}";
+                    }
+                    break;
+
+                case "getformno":
+                    if (!string.IsNullOrEmpty(request.userid) && !string.IsNullOrEmpty(request.passwd) && userservice.UserExists(request.userid, request.passwd))
+                    {
+                        
+                            response = apiservice.GetFormNo(request.userid);
+                        
                     }
                     else
                     {
