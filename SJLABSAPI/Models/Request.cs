@@ -26,6 +26,16 @@ namespace SJLABSAPI.Models
         public string address1 { get; set; }
         public string partycode { get; set; }
         public string chequeno { get; set; }
+        public DateTime dddate { get; set; }
+        public decimal paymode { get; set; }
+        public string paymodetext{ get; set; }
+        public decimal amount{ get; set; }        
+        public DateTime chqdate { get; set; }
+        public string bankname{ get; set; }
+        public string issuebranch{ get; set; }
+        public string filename{ get; set; }        
+        public decimal bankid { get; set; }
+        
     }
     
     public class TrnorderDetailList
