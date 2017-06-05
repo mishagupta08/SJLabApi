@@ -662,7 +662,7 @@ status = r.DispatchStatus == "Y" ? "Dispatched" : "Pending",
             uService = new UserService();
             try
             {
-                decimal formNo = uService.GetFormNo(productrequest.idno);
+                decimal formNo = uService.GetFormNo(productrequest.userid);
                 decimal FSessId = 0;
                 decimal orderno = 100001;
                 decimal TotalOrder = 0;
@@ -707,7 +707,7 @@ status = r.DispatchStatus == "Y" ? "Dispatched" : "Pending",
                 {
                     product = GetProductDetail(orderrow.productid);
                     query += "Insert Into TrnorderDetail(OrderNo,FormNo,ProductID,Qty,Rate,NetAmount,RecTimeStamp,DispDate,DispStatus,DispQty,RemQty,DispAmt,MRP,DP,ProductName,ImgPath,RP,BV,FSEssId)";
-                    query += " Values('" + orderno + "','" + formNo + "','" + orderrow.productid + "','" + orderrow.qty + "','" + orderrow.rate + "','" + (product.DP * orderrow.qty) + "',Getdate(),'','P',0,'" + orderrow.qty + "',0,";
+                    query += " Values('" + orderno + "','" + formNo + "','" + orderrow.productid + "','" + orderrow.qty + "','" + product.DP + "','" + (product.DP * orderrow.qty) + "',Getdate(),'','P',0,'" + orderrow.qty + "',0,";
                     query += " '" + product.MRP + "','" + product.DP + "','" + product.ProductName + "','','" + (product.RP * orderrow.qty) + "','" + (product.BV * orderrow.qty) + "','1' )";
                     TotalOrder = TotalOrder + 1;
                     TotalAmount = TotalAmount + (product.DP * orderrow.qty);
@@ -774,7 +774,7 @@ status = r.DispatchStatus == "Y" ? "Dispatched" : "Pending",
             {
                 using (var db = new SJLInvEntities())
                 {
-                    product = (from r in db.M_ProductMaster where r.ActiveStatus == "Y" && r.OnWebSite == "Y" select r).FirstOrDefault();
+                    product = (from r in db.M_ProductMaster where r.ProductCode== productId && r.ActiveStatus == "Y" && r.OnWebSite == "Y" select r).FirstOrDefault();
                 }
             }
             catch (Exception ex)
@@ -975,5 +975,30 @@ status = r.DispatchStatus == "Y" ? "Dispatched" : "Pending",
             }
             return response;
         }
+
+        public string GetComplainType()
+        {
+            string response = "{\"response\":\"FAILED\"}";
+            try
+            {
+                using (var db = new SjLabsEntities())
+                {
+                    var complainList = (from r in db.M_ComplaintTypeMaster
+                                  select new
+                                  {
+                                      cid= r.CTypeID,
+                                      complain = r.CType
+                                  }).ToList();
+                    response = "{\"complains\":" + JsonConvert.SerializeObject(complainList) + ",\"response\":\"OK\"}";
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.InnerException);
+            }
+            return response;
+        }
+
+        
     }
 }

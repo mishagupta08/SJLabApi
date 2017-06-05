@@ -274,10 +274,18 @@ namespace SJLABSAPI.Controllers
 
                 case "getformno":
                     if (!string.IsNullOrEmpty(request.userid) && !string.IsNullOrEmpty(request.passwd) && userservice.UserExists(request.userid, request.passwd))
+                    {                        
+                            response = apiservice.GetFormNo(request.userid);                        
+                    }
+                    else
                     {
-                        
-                            response = apiservice.GetFormNo(request.userid);
-                        
+                        response = "{\"response\":\"FAILED\",\"msg\":\"Invalid Login Details.\"}";
+                    }
+                    break;
+                case "complaintypes":
+                    if (!string.IsNullOrEmpty(request.userid) && !string.IsNullOrEmpty(request.passwd) && userservice.UserExists(request.userid, request.passwd))
+                    {
+                        response = apiservice.GetComplainType();
                     }
                     else
                     {
