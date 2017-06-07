@@ -636,15 +636,15 @@ namespace SJLABSAPI.Service
                                 select
 new
 {
-orderno = r.OrderNo,
-orderdate = r.OrderDate,
-orderqty = r.OrderQty,
-ordeeramt = r.OrderAmt,
-bankamt = r.BankAmt,
-otheramt = r.OtherAmt,
-walletamt = r.WalletAmt,
-remark = r.Remark,
-status = r.DispatchStatus == "Y" ? "Dispatched" : "Pending",
+    orderno = r.OrderNo,
+    orderdate = r.OrderDate,
+    orderqty = r.OrderQty,
+    ordeeramt = r.OrderAmt,
+    bankamt = r.BankAmt,
+    otheramt = r.OtherAmt,
+    walletamt = r.WalletAmt,
+    remark = r.Remark,
+    status = r.DispatchStatus == "Y" ? "Dispatched" : "Pending",
 }).ToList();
                     response = "{\"orders\":" + JsonConvert.SerializeObject(list) + ",\"response\":\"OK\"}";
                 }
@@ -662,7 +662,8 @@ status = r.DispatchStatus == "Y" ? "Dispatched" : "Pending",
             uService = new UserService();
             try
             {
-                decimal formNo = uService.GetFormNo(productrequest.userid);
+                decimal formNo = uService.GetFormNo(productrequest.idno);
+                decimal UserFormNo = uService.GetFormNo(productrequest.userid);
                 decimal FSessId = 0;
                 decimal orderno = 100001;
                 decimal TotalOrder = 0;
@@ -708,7 +709,7 @@ status = r.DispatchStatus == "Y" ? "Dispatched" : "Pending",
                     product = GetProductDetail(orderrow.productid);
                     query += "Insert Into TrnorderDetail(OrderNo,FormNo,ProductID,Qty,Rate,NetAmount,RecTimeStamp,DispDate,DispStatus,DispQty,RemQty,DispAmt,MRP,DP,ProductName,ImgPath,RP,BV,FSEssId)";
                     query += " Values('" + orderno + "','" + formNo + "','" + orderrow.productid + "','" + orderrow.qty + "','" + product.DP + "','" + (product.DP * orderrow.qty) + "',Getdate(),'','P',0,'" + orderrow.qty + "',0,";
-                    query += " '" + product.MRP + "','" + product.DP + "','" + product.ProductName + "','','" + (product.RP * orderrow.qty) + "','" + (product.BV * orderrow.qty) + "','1' )";
+                    query += " '" + product.MRP + "','" + product.DP + "','" + product.ProductName + "','','" + product.RP + "','" + product.BV  + "','1' )";
                     TotalOrder = TotalOrder + 1;
                     TotalAmount = TotalAmount + (product.DP * orderrow.qty);
                     TotalQty = TotalQty + orderrow.qty;
@@ -718,13 +719,13 @@ status = r.DispatchStatus == "Y" ? "Dispatched" : "Pending",
                 if (productrequest.wamt > 0)
                 {
                     query = query + "INSERT INTO TrnVoucher(VoucherNo,VoucherDate,DrTo,CrTo,Amount,Narration,RefNo,AcType,VTYpe,SessID,WSessID) SELECT ISNULL(Max(VoucherNo)+1,1001),'" + DateTime.Now.ToString("dd-MMM-yyyy") + "','";
-                    query = query + formNo + "','0'," + productrequest.wamt + ",'Amount deducted by Product Request Req.No.:" + orderno + ".','Req/" + formNo + "','M','D',Convert(Varchar,Getdate(),112),'" + Convert.ToString(HttpContext.Current.Session["CurrentSessn"]) + "' FROM TrnVoucher;";
+                    query = query + UserFormNo + "','0'," + productrequest.wamt + ",'Amount deducted by Product Request Req.No.:" + orderno + ".','Req/" + UserFormNo + "','M','D',Convert(Varchar,Getdate(),112),'" + Convert.ToString(HttpContext.Current.Session["CurrentSessn"]) + "' FROM TrnVoucher;";
                 }
 
                 if (productrequest.requestfor.ToUpper() == "S" && productrequest.repurchase > 0)
                 {
                     query = query + "INSERT INTO TrnVoucher(VoucherNo,VoucherDate,DrTo,CrTo,Amount,Narration,RefNo,AcType,VTYpe,SessID,WSessID) SELECT ISNULL(Max(VoucherNo)+1,1001),'" + DateTime.Now.ToString("dd-MMM-yyyy") + "','";
-                    query = query + formNo + "','0'," + productrequest.repurchase + ",'Amount deducted by Product Request Req.No.:" + orderno + ".','Req/" + formNo + "','R','D',Convert(Varchar,Getdate(),112),'" + Convert.ToString(HttpContext.Current.Session["CurrentSessn"]) + "' FROM TrnVoucher;";
+                    query = query + UserFormNo + "','0'," + productrequest.repurchase + ",'Amount deducted by Product Request Req.No.:" + orderno + ".','Req/" + UserFormNo + "','R','D',Convert(Varchar,Getdate(),112),'" + Convert.ToString(HttpContext.Current.Session["CurrentSessn"]) + "' FROM TrnVoucher;";
                 }
 
 
@@ -774,7 +775,7 @@ status = r.DispatchStatus == "Y" ? "Dispatched" : "Pending",
             {
                 using (var db = new SJLInvEntities())
                 {
-                    product = (from r in db.M_ProductMaster where r.ProductCode== productId && r.ActiveStatus == "Y" && r.OnWebSite == "Y" select r).FirstOrDefault();
+                    product = (from r in db.M_ProductMaster where r.ProductCode == productId && r.ActiveStatus == "Y" && r.OnWebSite == "Y" select r).FirstOrDefault();
                 }
             }
             catch (Exception ex)
@@ -900,8 +901,8 @@ status = r.DispatchStatus == "Y" ? "Dispatched" : "Pending",
         }
 
 
-        
-            public string SaveWalletRequest(Request request)
+
+        public string SaveWalletRequest(Request request)
         {
             string response = "{\"response\":\"FAILED\"}";
             string query = string.Empty;
@@ -913,13 +914,13 @@ status = r.DispatchStatus == "Y" ? "Dispatched" : "Pending",
                 ChqDate = request.dddate;
             }
             decimal reqno = 0;
-            int i = 0;            
+            int i = 0;
 
             try
             {
                 query = "INSERT INTO WalletReq(ReqNo, ReqDate, Formno, PID, Paymode, Amount, ChqNo, ChqDate, BankName, BranchName, ScannedFile, Remarks, BankId, Transno)  ";
                 query += "Select ISNULL(Max(ReqNo)+1,'1001'),getDate(),'" + formNo + "','" + request.paymode + "','" + request.paymodetext + "','" + request.amount + "',";
-                query += "'" + request.chequeno + "','"+ ChqDate + "','" + request.bankname + "','" + request.issuebranch + "','" + request.filename + "','" + request.remarks + "','" + request.bankid + "','" + request.chequeno + "' FROM WalletReq ";
+                query += "'" + request.chequeno + "','" + ChqDate + "','" + request.bankname + "','" + request.issuebranch + "','" + request.filename + "','" + request.remarks + "','" + request.bankid + "','" + request.chequeno + "' FROM WalletReq ";
                 query += "; Insert into UserHistory(UserId,UserName,PageName,Activity,ModifiedFlds,RecTimeStamp,MemberId)Values";
                 query += "('" + formNo + "','" + request.memname + "','Payment Request','Payment Request','Amount: " + request.amount + "',Getdate()," + formNo + ")";
 
@@ -984,11 +985,11 @@ status = r.DispatchStatus == "Y" ? "Dispatched" : "Pending",
                 using (var db = new SjLabsEntities())
                 {
                     var complainList = (from r in db.M_ComplaintTypeMaster
-                                  select new
-                                  {
-                                      cid= r.CTypeID,
-                                      complain = r.CType
-                                  }).ToList();
+                                        select new
+                                        {
+                                            cid = r.CTypeID,
+                                            complain = r.CType
+                                        }).ToList();
                     response = "{\"complains\":" + JsonConvert.SerializeObject(complainList) + ",\"response\":\"OK\"}";
                 }
             }
@@ -999,6 +1000,6 @@ status = r.DispatchStatus == "Y" ? "Dispatched" : "Pending",
             return response;
         }
 
-        
+
     }
 }
