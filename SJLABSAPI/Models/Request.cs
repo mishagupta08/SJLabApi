@@ -35,10 +35,13 @@ namespace SJLABSAPI.Models
         public string issuebranch{ get; set; }
         public string filename{ get; set; }        
         public decimal bankid { get; set; }
-        
+        public int compid { get; set; } 
+        public string comptype { get; set; } 
+        public string complaint { get; set; } 
+        public string cgroup { get; set; }
     }
-    
-    public class TrnorderDetailList
+   
+public class TrnorderDetailList
     {
         public decimal orderno { get; set; }
         public decimal formno { get; set; }

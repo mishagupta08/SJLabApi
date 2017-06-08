@@ -8,6 +8,8 @@ using System.Data.Entity;
 using Newtonsoft.Json;
 using System.Data.SqlClient;
 using System.Web;
+using System.Net;
+using System.IO;
 
 namespace SJLABSAPI.Service
 {
@@ -999,7 +1001,224 @@ new
             }
             return response;
         }
+        
+       public string SubmitComplain(Request request)
+        {
+            string response = "{\"response\":\"FAILED\"}";
+            string complainID = string.Empty;
+            string userEmail = string.Empty;
+            string group = string.Empty;
+            uService = new UserService();
+            int i = 0;
+            try
+            {
+                string query = "INSERT INTO M_ComplaintMaster(IDNO,CTypeID,CType,Complaint) VALUES ('" + request.idno + "','" + request.compid + "','"+request.comptype +"','"+request.complaint + "')";
+                
+                using (conn = new SqlConnection(sConnectionString))
+                {
+                    conn.Open();
+                    sqlCmd = new SqlCommand(query, conn);
+                   i = sqlCmd.ExecuteNonQuery();
+                    if (i > 0)
+                    {
+                        query = "select top 1* from M_ComplaintTypeMaster as a,M_ComplaintMaster as b,M_UserMaster as c,M_UserGroupMaster as d ";
+                        query += " where a.CtypeId=b.CtypeId and c.UserId=a.UserId and c.GroupId=d.GroupId and d.ActiveStatus='Y' and d.RowStatus='Y' and  c.ActiveStatus='Y' and c.RowStatus='Y' and a.RowStatus='Y' and a.ActiveStatus='Y' and a.CtypeId='" + request.compid + "' order by CId Desc  ";
+                        sqlCmd = new SqlCommand(query, conn);
+                        dr = sqlCmd.ExecuteReader();
+                        
+                        while (dr.Read())
+                        {
+                            complainID = Convert.ToString(dr["CId"]);
+                            userEmail = Convert.ToString(dr["ToUserEmail"]);
+                            group = Convert.ToString(dr["GroupName"]);
+                        }                                               
+                    }
+                }
+
+                if (i > 0)
+                {
+                    using (var db = new SjLabsEntities())
+                    {
+                        decimal formNo = uService.GetFormNo(request.userid);
+                        var member = (from r in db.M_MemberMaster
+                                      where r.FormNo == formNo
+                                      select new
+                                      {
+                                          email = r.EMail,
+                                          memname = r.MemFirstName + " " + r.MemLastName
+                                      }).FirstOrDefault();
+
+                        SendToMemberMail(request, complainID, member.memname, member.email, group);
+                        SendComplaintSMS(member.memname, complainID);
+                        SendMail(request, member.memname, userEmail);
+                        response = "{\"response\":\"OK\",\"complaintno\":"+complainID+"}";
+                    }
+                }
 
 
+                }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.InnerException);
+            }
+            return response;
+        }
+
+        private bool SendToMemberMail(Request request,string compId,string memname,string email,string group)
+        {
+            bool response = false;
+            uService = new UserService();
+            try
+            {               
+                    string msg = "<table style='margin:0; padding:10px; font-size:14px; font-family:verdana,arial,helvetica; line-height:23px; text-align:justify;width:100%'><tr><td>";
+                    msg += "<span style=' font-weight: bold;'> " + memname + ",</span><br />";
+                    msg += " Thank you for contacting us. This is an automated response confirming the complaint you have sent. One of our representative will get back to you as soon. For your records, the details of the complaint are listed below. <br /> <br />";
+                    msg += " <strong>&nbsp;&nbsp;&nbsp;&nbsp; Complaint No: </strong>" + compId + "<br />";
+                    msg += "< strong>&nbsp;&nbsp;&nbsp;&nbsp;  Complaint Type: </strong>" + request.comptype + "<br />";
+                    msg += " <strong>&nbsp;&nbsp;&nbsp;&nbsp;  Department: </strong> " + group + " <br />";
+                    msg += " <strong>&nbsp;&nbsp;&nbsp;&nbsp;  Status: </strong> Open <br /><br/> ";
+                    msg += " When replying, please make sure that the complaint no. is kept in the subject line to ensure that your replies are tracked appropriately.";
+                    msg += " <br /> Kind regards,<br /><br />";
+                    msg += " <span style='color: #0099FF; font-weight: bold;'></span><br />";
+                    msg += " <a href='" + Convert.ToString(HttpContext.Current.Session["CompWeb"]) + "' target='_blank' style='color:#0000FF; text-decoration:underline;'>" + Convert.ToString(HttpContext.Current.Session["CompName"]) + "</a><br /><br /><br /></td></tr></table>";
+                    response = uService.SendMail(email, msg, "Complaint Confirmation", "");                                
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.InnerException);
+            }
+            return response;
+        }
+
+
+        public bool SendComplaintSMS(string memname, string complaintNo)
+        {
+            WebClient client = new WebClient();
+            string baseurl = string.Empty;
+            Stream data = null;
+            try
+            {                
+                string msg = "Hi " + memname + ", Your complaint has been recieved and complaint no. is" + complaintNo + ".";       
+                baseurl = "http://49.50.77.216/API/SMSHttp.aspx?UserId=" + Convert.ToString(System.Web.HttpContext.Current.Session["SmsId"]) + "&pwd=" + Convert.ToString(System.Web.HttpContext.Current.Session["SmsPass"]) + "&SenderId=" + Convert.ToString(System.Web.HttpContext.Current.Session["ClientId"]) + "&Contacts=add moile no&Message=" + msg + "\"";
+                data = client.OpenRead(baseurl);
+                StreamReader reader = new StreamReader(data);
+                string s = string.Empty;
+                s = reader.ReadToEnd();
+                data.Close();
+                reader.Close();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.InnerException);
+                return false;
+            }
+        }
+
+
+        private bool SendMail(Request request,string memname,string useremail)
+        {
+            bool response = false;
+            uService = new UserService();
+
+            try
+            {                
+                    string msg = "<table style='margin:0; padding:10px; font-size:14px; font-family:verdana,arial,helvetica; line-height:23px; text-align:justify;width:100%'> ";
+                    msg += "<tr><td>";
+                    msg += "<span style='font-weight: bold;'>Dear Sir/Madam,</span><br />";
+                    msg += "<strong>ID No.: </strong>" + request.idno.Trim() + "<br />";
+                    msg += "<strong>Name: </strong>" + memname.Trim() + "<br />";
+                    msg += "<br />";
+                    msg += "I am sending a complaint, please consider it. <br /><br />";
+                    msg += "<span style='font-weight: bold;'>My Complaint</span><br />";
+                    msg += "<strong>Complaint Type: </strong>" + request.comptype.Trim() + "<br />";
+                    msg += "<strong>Complaint: </strong>" + request.complaint + "<br /><br />";
+                    msg += "You may check it at Admin Panel: <a href='" + Convert.ToString(HttpContext.Current.Session["AdminWeb"]) + "' target='_blank' style='color:#0000FF; text-decoration:underline;'>" + Convert.ToString(HttpContext.Current.Session["AdminWeb"]) + "</a><br />";
+                    msg += "<br />";
+                    msg += "<span style='color: #0099FF; font-weight: bold;'>Sincerely,</span><br />";
+                    msg += "<a href='" + Convert.ToString(HttpContext.Current.Session["CompWeb"]) + "' target='_blank' style='color:#0000FF; text-decoration:underline;'>" + Convert.ToString(HttpContext.Current.Session["CompName"]) + "</a><br />";
+                    msg += "<br /><br /></td></tr></table>";
+
+                    response = uService.SendMail(useremail, msg, "Member Complaint", "");                
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.InnerException);
+            }
+            return response;
+        }
+
+        public string ComplaintSolution(Request request)
+        {
+            string response = "{\"response\":\"FAILED\"}";
+            string data = string.Empty;
+            try
+            {
+                using (conn = new SqlConnection(sConnectionString))
+                {
+                    conn.Open();
+                    string query = "Select M.IDNo,M.CID,Cast(M.CID as varchar) as VCId,M.MemName,ISNULL(Replace(CONVERT(varchar, M.RecTimeStamp, 106), ' ', '-'), '') as CDate,M.CType,M.Complaint ,ISNULL(S.Solution, '') as Solution,ISNULL(Replace(CONVERT(varchar, S.RecTimeStamp, 106), ' ', '-'), '') as SDate FROM";
+                    query += "  (Select b.MemFirstName +' '+ b.MemLastName as MemName,a.*";
+                    query += "  FROM M_ComplaintMaster as a,M_MemberMaster as b WHERE a.IDNo=b.IDNo AND a.IDNo='" +request.idno+ "') as M LEFT JOIN M_SolutionMaster as S";
+                    query += "  ON M.CID=S.CID WHERE 1=1  ORDER BY M.RecTimeStamp DESC";
+                    sqlCmd = new SqlCommand(query, conn);
+                    dr = sqlCmd.ExecuteReader();
+                     data = "[";
+                    while (dr.Read())
+                    {
+                        data += "{'idno':'"+ dr["IDNo"] +"','vcid':'"+ dr["VCId"] + "','memname':'" + dr["MemName"] + "','cdate':'" + dr["CDate"] + "','ctype':'" + dr["CType"] + "','complaint':'" + dr["Complaint"] + "','solution':'" + dr["Solution"] + "','sdate':'" + dr["SDate"] + "'},";
+                    }
+                    if (data.Last() == ',')
+                    {
+                        data = data.Substring(0, data.Length - 1);
+                    }
+                    data += "]";
+                    dr.Close();
+                }
+                response = "{'complainlist':"+ data +",'response':'OK'}";
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.InnerException);
+                dr.Close();
+                conn.Close();
+            }
+            return response;
+        }
+
+        public string ComboRequestDetail(Request request)
+        {
+            string response = "{\"response\":\"FAILED\"}";
+            string data = string.Empty;
+            try
+            {
+                using (conn = new SqlConnection(sConnectionString))
+                {
+                    conn.Open();
+                    string query = "select orderno,Replace(Convert(varchar, OrderDate, 106), ' ', '-') as OrderDate,OrderAmt as OrderAmount,Remark,Case when  DispatchStatus = 'C' then 'Dispatched' else 'Pending' end as status,Case when HostIp = 'H' then b.PartyName else a.Address1 end as DeliveryAddress, Case when HostIp = 'H' then 'By Hand' when HostIp = 'C' then 'By Courier' when HostIp = 'S' then 'By Speed Post' end as DeliveryMode,   Case when  DispatchStatus = 'C' then 'Dispatched' else 'Pending' end as DispatchStatus  from Trnorder as a,SJLInv..M_LedgerMaster as b where a.OrderFor = b.PartyCode and b.GroupId Not In(5, 21) and b.OnWebSite = 'Y' and a.IDno ='" + request.idno +"' and OrderType = 'T'";
+                    sqlCmd = new SqlCommand(query, conn);
+                    dr = sqlCmd.ExecuteReader();
+                    data = "[";
+                    while (dr.Read())
+                    {
+                        data += "{'orderno':'" + dr["orderno"] + "','orderdate':'" + dr["OrderDate"] + "','orderamount':'" + dr["OrderAmount"] + "','remark':'" + dr["Remark"] + "','status':'" + dr["status"] + "','deliveryaddress':'" + dr["DeliveryAddress"] + "','deliverymode':'" + dr["DeliveryMode"] + "','dispatchstatus':'" + dr["DispatchStatus"] + "'},";
+                    }
+                    if (data.Last() == ',')
+                    {
+                        data = data.Substring(0, data.Length - 1);
+                    }
+                    data += "]";
+                    dr.Close();
+                }
+                response = "{'comborequestdetail':" + data + ",'response':'OK'}";
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.InnerException);
+                dr.Close();
+                conn.Close();
+            }
+            return response;
+        }
     }
 }

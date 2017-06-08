@@ -63,7 +63,7 @@ namespace SJLABSAPI.Service
                 string _MailID = Convert.ToString(System.Web.HttpContext.Current.Session["CompMail"]);
                 string _MailPass = Convert.ToString(System.Web.HttpContext.Current.Session["MailPass"]);
                 string _MailHost = Convert.ToString(System.Web.HttpContext.Current.Session["MailHost"]);
-                if (!string.IsNullOrEmpty(_MailHost) && !string.IsNullOrEmpty(_MailID) && !string.IsNullOrEmpty(_MailPass))
+                if (!string.IsNullOrEmpty(MailID) && !string.IsNullOrEmpty(_MailHost) && !string.IsNullOrEmpty(_MailID) && !string.IsNullOrEmpty(_MailPass))
                 {
                     string StrMsg = string.Empty;
                     System.Net.Mail.MailAddress SendFrom = new System.Net.Mail.MailAddress(_MailID);

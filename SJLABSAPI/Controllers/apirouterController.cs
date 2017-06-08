@@ -282,10 +282,42 @@ namespace SJLABSAPI.Controllers
                         response = "{\"response\":\"FAILED\",\"msg\":\"Invalid Login Details.\"}";
                     }
                     break;
+
                 case "complaintypes":
                     if (!string.IsNullOrEmpty(request.userid) && !string.IsNullOrEmpty(request.passwd) && userservice.UserExists(request.userid, request.passwd))
                     {
                         response = apiservice.GetComplainType();
+                    }
+                    else
+                    {
+                        response = "{\"response\":\"FAILED\",\"msg\":\"Invalid Login Details.\"}";
+                    }
+                    break;
+
+                case "submitcomplain":
+                    if (!string.IsNullOrEmpty(request.userid) && !string.IsNullOrEmpty(request.passwd) && userservice.UserExists(request.userid, request.passwd))
+                    {
+                        response = apiservice.SubmitComplain(request);
+                    }
+                    else
+                    {
+                        response = "{\"response\":\"FAILED\",\"msg\":\"Invalid Login Details.\"}";
+                    }
+                    break;
+                case "complaintsolution":
+                    if (!string.IsNullOrEmpty(request.userid) && !string.IsNullOrEmpty(request.passwd) && userservice.UserExists(request.userid, request.passwd))
+                    {
+                        response = apiservice.ComplaintSolution(request);
+                    }
+                    else
+                    {
+                        response = "{\"response\":\"FAILED\",\"msg\":\"Invalid Login Details.\"}";
+                    }
+                    break;
+                case "comborequestdetail":
+                    if (!string.IsNullOrEmpty(request.userid) && !string.IsNullOrEmpty(request.passwd) && userservice.UserExists(request.userid, request.passwd))
+                    {
+                        response = apiservice.ComboRequestDetail(request);
                     }
                     else
                     {
